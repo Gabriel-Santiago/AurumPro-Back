@@ -10,8 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,14 +43,4 @@ public class ItemProposta {
     @ManyToOne
     @JoinColumn(name = "propostaId")
     private Proposta proposta;
-
-    @PrePersist
-    @PreUpdate
-    public void calcularValorTotal(){
-        if(this.valorHora != null && this.qtdHora != null){
-            this.valorTotal = this.valorHora.multiply(this.qtdHora);
-        }else {
-            this.valorTotal = BigDecimal.ZERO;
-        }
-    }
 }
