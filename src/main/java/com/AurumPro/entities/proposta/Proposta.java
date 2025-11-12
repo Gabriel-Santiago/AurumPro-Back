@@ -1,5 +1,9 @@
-package com.AurumPro.entities;
+package com.AurumPro.entities.proposta;
 
+import com.AurumPro.entities.base.BaseEntity;
+import com.AurumPro.entities.componentes.Convenio;
+import com.AurumPro.entities.componentes.Custo;
+import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.enums.TipoDesconto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -11,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +24,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -43,10 +47,22 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private TipoDesconto tipoDesconto;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemProposta> itemPropostaList = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "empresaId")
     private Empresa empresa;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "clienteId")
+    private BaseEntity cliente;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "convenioId")
+    private Convenio convenio;
+
+    @OneToMany(mappedBy = "proposta", cascade = CascadeType.ALL)
+    private List<ItemProposta> itemPropostaList;
+
+    @OneToMany(mappedBy = "proposta", cascade = CascadeType.ALL)
+    private List<Custo> custoList;
 }

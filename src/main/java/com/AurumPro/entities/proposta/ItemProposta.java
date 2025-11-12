@@ -1,10 +1,8 @@
-package com.AurumPro.entities;
+package com.AurumPro.entities.proposta;
 
-import com.AurumPro.enums.TipoMicroservico;
-import com.AurumPro.enums.TipoServico;
+import com.AurumPro.entities.componentes.MicroServico;
+import com.AurumPro.entities.componentes.Servico;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,17 +28,18 @@ public class ItemProposta {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long itemPropostaId;
 
-    @Enumerated(EnumType.STRING)
-    private TipoServico tipoServico;
-
-    @Enumerated(EnumType.STRING)
-    private TipoMicroservico tipoMicroservico;
-
-    private BigDecimal valorHora;
     private BigDecimal qtdHora;
     private BigDecimal valorTotal;
 
     @ManyToOne
     @JoinColumn(name = "propostaId")
     private Proposta proposta;
+
+    @ManyToOne
+    @JoinColumn(name = "servicoId")
+    private Servico servico;
+
+    @ManyToOne
+    @JoinColumn(name = "microServicoId")
+    private MicroServico microServico;
 }
