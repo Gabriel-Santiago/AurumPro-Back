@@ -39,7 +39,7 @@ public class Empresa extends BaseEntity{
     private String bairro;
     private String cidade;
     private String estado;
-    private Integer numero;
+    private String numero;
 
     @OneToMany(mappedBy = "empresa")
     private List<PessoaFisica> pessoaFisicaList;
