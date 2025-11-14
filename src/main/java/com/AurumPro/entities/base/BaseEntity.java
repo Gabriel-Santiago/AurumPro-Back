@@ -8,14 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 @MappedSuperclass
+@Getter
 public abstract class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
     private Long id;
 
-    @Getter
     @Setter
     private String nome;
 }
