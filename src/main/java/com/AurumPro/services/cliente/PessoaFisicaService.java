@@ -10,7 +10,7 @@ import com.AurumPro.dtos.cliente.pf.UpdateEmailAndTelefonePessoaFisicaDTO;
 import com.AurumPro.dtos.cliente.pf.UpdateEnderecoPessoaFisicaDTO;
 import com.AurumPro.entities.cliente.PessoaFisica;
 import com.AurumPro.entities.empresa.Empresa;
-import com.AurumPro.exceptions.cliente.PessoFisicaNotFoundEmpresaException;
+import com.AurumPro.exceptions.cliente.PessoaFisicaNotFoundEmpresaException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
 import com.AurumPro.repositories.cliente.PessoaFisicaRepository;
@@ -162,7 +162,7 @@ public class PessoaFisicaService {
         PessoaFisica pessoaFisica = validadeId.validate(dto.id(), repository);
 
         if(!pessoaFisica.getEmpresa().getId().equals(empresa.getId())){
-            throw new PessoFisicaNotFoundEmpresaException();
+            throw new PessoaFisicaNotFoundEmpresaException();
         }
 
         if(!empresa.getSenha().equals(dto.senha())){
