@@ -13,11 +13,10 @@ import com.AurumPro.dtos.empresa.UpdateTelefoneEmpresaDTO;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.exceptions.empresa.IdEmpresaNotFoundException;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
-import com.AurumPro.exceptions.endereco.CepIsEmptyException;
-import com.AurumPro.exceptions.endereco.CepNotFoundException;
 import com.AurumPro.exceptions.empresa.CnpjExistException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
+import com.AurumPro.utils.ValidateCep;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +27,16 @@ public class EmpresaService {
 
     private final EmpresaRepository repository;
     private final ReceitaWS receitaWS;
+    private final ValidateCep validateCep;
     private final ViaCep viaCep;
 
     public EmpresaService(EmpresaRepository repository,
                           ReceitaWS receitaWS,
+                          ValidateCep validateCep,
                           ViaCep viaCep) {
         this.repository = repository;
         this.receitaWS = receitaWS;
+        this.validateCep = validateCep;
         this.viaCep = viaCep;
     }
 
@@ -47,6 +49,8 @@ public class EmpresaService {
         DadosReceita dadosReceita = receitaWS
                 .consultaCnpj(dto.cnpj());
 
+        validateCep.validate(dadosReceita.cep());
+
         Empresa empresa = new Empresa();
         empresa.setCnpj(dto.cnpj());
         empresa.setSenha(dto.senha());
@@ -57,8 +61,6 @@ public class EmpresaService {
         empresa.setTelefone(dadosReceita.telefone());
 
         empresa.setCep(dadosReceita.cep());
-
-        validateCep(dadosReceita.cep());
 
         empresa.setRua(dadosReceita.logradouro());
         empresa.setBairro(dadosReceita.bairro());
@@ -117,7 +119,7 @@ public class EmpresaService {
     @Transactional
     public void updateCepEmpresa(UpdateCepEmpresaDTO dto) throws Exception {
         validateId(dto.id());
-        validateCep(dto.cep());
+        validateCep.validate(dto.cep());
 
         Endereco endereco = viaCep.viaCep(dto.cep());
 
@@ -164,16 +166,6 @@ public class EmpresaService {
         }
 
         repository.delete(empresa);
-    }
-
-    private void validateCep(String cep){
-        if(cep == null){
-            throw new CepNotFoundException();
-        }
-
-        if(cep.trim().isEmpty()){
-            throw new CepIsEmptyException();
-        }
     }
 
     private Empresa validateId(Long id){
