@@ -11,11 +11,11 @@ import com.AurumPro.dtos.empresa.UpdateCepEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateEmailEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateTelefoneEmpresaDTO;
 import com.AurumPro.entities.empresa.Empresa;
-import com.AurumPro.exceptions.empresa.IdEmpresaNotFoundException;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
 import com.AurumPro.exceptions.empresa.CnpjExistException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
+import com.AurumPro.utils.ValidadeId;
 import com.AurumPro.utils.ValidateCep;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -28,15 +28,18 @@ public class EmpresaService {
     private final EmpresaRepository repository;
     private final ReceitaWS receitaWS;
     private final ValidateCep validateCep;
+    private final ValidadeId validadeId;
     private final ViaCep viaCep;
 
     public EmpresaService(EmpresaRepository repository,
                           ReceitaWS receitaWS,
                           ValidateCep validateCep,
+                          ValidadeId validadeId,
                           ViaCep viaCep) {
         this.repository = repository;
         this.receitaWS = receitaWS;
         this.validateCep = validateCep;
+        this.validadeId = validadeId;
         this.viaCep = viaCep;
     }
 
@@ -118,12 +121,10 @@ public class EmpresaService {
 
     @Transactional
     public void updateCepEmpresa(UpdateCepEmpresaDTO dto) throws Exception {
-        validateId(dto.id());
+        Empresa empresa = validadeId.validate(dto.id(), repository);
         validateCep.validate(dto.cep());
 
         Endereco endereco = viaCep.viaCep(dto.cep());
-
-        Empresa empresa = new Empresa();
 
         empresa.setCep(dto.cep());
         empresa.setRua(endereco.logradouro());
@@ -137,9 +138,7 @@ public class EmpresaService {
 
     @Transactional
     public void updateTelefoneEmpresa(UpdateTelefoneEmpresaDTO dto){
-        validateId(dto.id());
-
-        Empresa empresa = new Empresa();
+        Empresa empresa = validadeId.validate(dto.id(), repository);
 
         empresa.setTelefone(dto.telefone());
 
@@ -148,9 +147,7 @@ public class EmpresaService {
 
     @Transactional
     public void updateEmailEmpresa(UpdateEmailEmpresaDTO dto){
-        validateId(dto.id());
-
-        Empresa empresa = new Empresa();
+        Empresa empresa = validadeId.validate(dto.id(), repository);
 
         empresa.setEmail(dto.email());
 
@@ -159,17 +156,12 @@ public class EmpresaService {
 
     @Transactional
     public void deleteEmpresa(DeleteEmpresaDTO dto){
-        Empresa empresa = validateId(dto.id());
+        Empresa empresa = validadeId.validate(dto.id(), repository);
 
         if(!empresa.getSenha().equals(dto.senha())){
             throw new SenhaEmpresaIncorretException();
         }
 
         repository.delete(empresa);
-    }
-
-    private Empresa validateId(Long id){
-        return repository.findById(id)
-                .orElseThrow(IdEmpresaNotFoundException::new);
     }
 }
