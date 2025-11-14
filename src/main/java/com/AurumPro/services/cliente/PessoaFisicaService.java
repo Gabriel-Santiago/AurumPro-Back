@@ -2,7 +2,12 @@ package com.AurumPro.services.cliente;
 
 import com.AurumPro.apis.Endereco;
 import com.AurumPro.apis.ViaCep;
-import com.AurumPro.dtos.cliente.pf.*;
+import com.AurumPro.dtos.cliente.pf.CreatePessoaFisicaDTO;
+import com.AurumPro.dtos.cliente.pf.DeletePessoaFisicaDTO;
+import com.AurumPro.dtos.cliente.pf.FindPessoaFisicaByUfDTO;
+import com.AurumPro.dtos.cliente.pf.PessoaFisicaDTO;
+import com.AurumPro.dtos.cliente.pf.UpdateEmailAndTelefonePessoaFisicaDTO;
+import com.AurumPro.dtos.cliente.pf.UpdateEnderecoPessoaFisicaDTO;
 import com.AurumPro.entities.cliente.PessoaFisica;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.exceptions.cliente.PessoFisicaNotFoundEmpresaException;
