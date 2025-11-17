@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "itemProposta")
@@ -28,7 +29,6 @@ public class ItemProposta {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long itemPropostaId;
 
-    private BigDecimal qtdHora;
     private BigDecimal valorTotal;
 
     @ManyToOne
@@ -37,9 +37,9 @@ public class ItemProposta {
 
     @ManyToOne
     @JoinColumn(name = "servicoId")
-    private Servico servico;
+    private List<Servico> servico;
 
     @ManyToOne
     @JoinColumn(name = "microServicoId")
-    private MicroServico microServico;
+    private List<MicroServico> microServico;
 }
