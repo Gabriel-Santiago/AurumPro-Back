@@ -21,6 +21,8 @@ import java.math.BigDecimal;
 public class MicroServico extends BaseEmpresaEntity {
 
     private BigDecimal valorHora;
+    private BigDecimal qtdHora;
+    private BigDecimal valorTotal;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "servicoId")
