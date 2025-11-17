@@ -1,6 +1,8 @@
 package com.AurumPro.services.cliente;
 
+import com.AurumPro.apis.DadosReceita;
 import com.AurumPro.apis.Endereco;
+import com.AurumPro.apis.ReceitaWS;
 import com.AurumPro.apis.ViaCep;
 import com.AurumPro.dtos.cliente.pj.CreatePessoaJuridicaDTO;
 import com.AurumPro.dtos.cliente.pj.DeletePessoaJuridicaDTO;
@@ -28,6 +30,7 @@ public class PessoaJuridicaService {
 
     private final EmpresaRepository empresaRepository;
     private final PessoaJuridicaRepository repository;
+    private final ReceitaWS receitaWS;
     private final ValidateCep validateCep;
     private final ValidateCnpj validateCnpj;
     private final ValidadeId validadeId;
@@ -35,12 +38,14 @@ public class PessoaJuridicaService {
 
     public PessoaJuridicaService(EmpresaRepository empresaRepository,
                                  PessoaJuridicaRepository repository,
+                                 ReceitaWS receitaWS,
                                  ValidateCep validateCep,
                                  ValidateCnpj validateCnpj,
                                  ValidadeId validadeId,
                                  ViaCep viaCep) {
         this.empresaRepository = empresaRepository;
         this.repository = repository;
+        this.receitaWS = receitaWS;
         this.validateCep = validateCep;
         this.validateCnpj = validateCnpj;
         this.validadeId = validadeId;
@@ -53,22 +58,23 @@ public class PessoaJuridicaService {
                 .findById(dto.id())
                 .orElseThrow(EmpresaNotFoundException::new);
 
-        validateCep.validate(dto.cep());
         validateCnpj.validate(dto.cnpj());
 
-        Endereco endereco = viaCep.viaCep(dto.cep());
+        DadosReceita dadosReceita = receitaWS.consultaCnpj(dto.cnpj());
+
+        validateCep.validate(dadosReceita.cep());
 
         PessoaJuridica pj = new PessoaJuridica();
         pj.setNome(dto.nome());
         pj.setEmail(dto.email());
         pj.setCnpj(dto.cnpj());
-        pj.setTelefone(dto.telefone());
+        pj.setTelefone(dadosReceita.telefone());
 
-        pj.setCep(dto.cep());
-        pj.setRua(endereco.logradouro());
-        pj.setBairro(endereco.bairro());
-        pj.setCidade(endereco.localidade());
-        pj.setEstado(endereco.uf());
+        pj.setCep(dadosReceita.cep());
+        pj.setRua(dadosReceita.logradouro());
+        pj.setBairro(dadosReceita.bairro());
+        pj.setCidade(dadosReceita.municipio());
+        pj.setEstado(dadosReceita.uf());
         pj.setNumero(dto.numero());
 
         pj.setEmpresa(empresa);
