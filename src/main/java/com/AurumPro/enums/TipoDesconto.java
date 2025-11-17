@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum TipoDesconto {
 
     PORCENTAGEM("Porcentagem"),
-    VALOR("Valor");
+    VALOR("Valor"),
+    NENHUM("Nenhum");
 
     private String descricao;
 

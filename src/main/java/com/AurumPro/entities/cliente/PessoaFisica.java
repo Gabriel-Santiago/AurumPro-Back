@@ -1,6 +1,6 @@
 package com.AurumPro.entities.cliente;
 
-import com.AurumPro.entities.base.BaseClienteEntity;
+import com.AurumPro.entities.base.ClienteEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @Setter
-public class PessoaFisica extends BaseClienteEntity {
+public class PessoaFisica extends ClienteEntity {
 
     private LocalDate dataNascimento;
     private Integer idade;

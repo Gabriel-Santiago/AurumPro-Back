@@ -1,16 +1,19 @@
 package com.AurumPro.entities.base;
 
 import com.AurumPro.entities.empresa.Empresa;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-@MappedSuperclass
-public abstract class BaseClienteEntity extends BaseEntity{
+public abstract class ClienteEntity extends BaseEntity{
 
     private String email;
 

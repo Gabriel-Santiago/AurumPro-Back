@@ -1,6 +1,6 @@
 package com.AurumPro.entities.cliente;
 
-import com.AurumPro.entities.base.BaseClienteEntity;
+import com.AurumPro.entities.base.ClienteEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @Setter
-public class PessoaJuridica extends BaseClienteEntity {
+public class PessoaJuridica extends ClienteEntity {
 
     private String cnpj;
 }

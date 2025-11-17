@@ -1,6 +1,6 @@
 package com.AurumPro.entities.proposta;
 
-import com.AurumPro.entities.base.BaseEntity;
+import com.AurumPro.entities.base.ClienteEntity;
 import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.empresa.Empresa;
@@ -54,15 +54,15 @@ public class Proposta {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "clienteId")
-    private BaseEntity cliente;
+    private ClienteEntity cliente;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "convenioId")
     private Convenio convenio;
 
     @OneToMany(mappedBy = "proposta", cascade = CascadeType.ALL)
-    private ItemProposta itemProposta;
+    private List<Custo> custoList;
 
     @OneToMany(mappedBy = "proposta", cascade = CascadeType.ALL)
-    private List<Custo> custoList;
+    private List<ItemProposta> itemPropostaList;
 }
