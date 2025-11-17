@@ -61,7 +61,7 @@ public class Proposta {
     private Convenio convenio;
 
     @OneToMany(mappedBy = "proposta", cascade = CascadeType.ALL)
-    private List<ItemProposta> itemPropostaList;
+    private ItemProposta itemProposta;
 
     @OneToMany(mappedBy = "proposta", cascade = CascadeType.ALL)
     private List<Custo> custoList;
