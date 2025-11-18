@@ -1,6 +1,8 @@
 package com.AurumPro.services.proposta;
 
 import com.AurumPro.dtos.proposta.CreatePropostaDTO;
+import com.AurumPro.dtos.proposta.FindPropostaByClienteDTO;
+import com.AurumPro.dtos.proposta.PropostaDTO;
 import com.AurumPro.entities.base.ClienteEntity;
 import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
@@ -114,4 +116,45 @@ public class PropostaService {
         repository.save(proposta);
     }
 
+    public List<PropostaDTO> findAll(Long empresaId){
+        List<Proposta> propostaList = repository.findByEmpresaId(empresaId);
+
+        return propostaList
+                .stream()
+                .map(dto -> new PropostaDTO(
+                        dto.getCliente().getId(),
+                        dto.getCliente().getNome(),
+                        dto.getConvenio().getId(),
+                        dto.getConvenio().getNome(),
+                        dto.getCustoList(),
+                        dto.getItemPropostaList(),
+                        dto.getTipoDesconto(),
+                        dto.isDesconto(),
+                        dto.getValorDesconto(),
+                        dto.getPorcentagemDesconto(),
+                        dto.getValorTotal()
+                ))
+                .toList();
+    }
+
+    public List<PropostaDTO> findPropostaByCliente(FindPropostaByClienteDTO dto){
+        List<Proposta> propostaList = repository.findByEmpresaIdAndClienteId(dto.empresaId(), dto.clienteId());
+
+        return propostaList
+                .stream()
+                .map(prop -> new PropostaDTO(
+                        prop.getCliente().getId(),
+                        prop.getCliente().getNome(),
+                        prop.getConvenio().getId(),
+                        prop.getConvenio().getNome(),
+                        prop.getCustoList(),
+                        prop.getItemPropostaList(),
+                        prop.getTipoDesconto(),
+                        prop.isDesconto(),
+                        prop.getValorDesconto(),
+                        prop.getPorcentagemDesconto(),
+                        prop.getValorTotal()
+                ))
+                .toList();
+    }
 }
