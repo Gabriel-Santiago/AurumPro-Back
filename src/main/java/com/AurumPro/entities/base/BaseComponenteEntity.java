@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @MappedSuperclass
 @Setter
-public abstract class BaseEmpresaEntity extends BaseEntity{
+public abstract class BaseComponenteEntity extends BaseEntity{
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "empresaId")

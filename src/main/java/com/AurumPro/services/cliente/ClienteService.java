@@ -27,7 +27,11 @@ import com.AurumPro.repositories.cliente.ClienteRepository;
 import com.AurumPro.repositories.cliente.PessoaFisicaRepository;
 import com.AurumPro.repositories.cliente.PessoaJuridicaRepository;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
-import com.AurumPro.utils.*;
+import com.AurumPro.utils.CalculateAge;
+import com.AurumPro.utils.ValidateCep;
+import com.AurumPro.utils.ValidateCnpj;
+import com.AurumPro.utils.ValidateCpf;
+import com.AurumPro.utils.ValidadeId;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.AurumPro.entities.componentes;
 
-import com.AurumPro.entities.base.BaseEmpresaEntity;
+import com.AurumPro.entities.base.BaseComponenteEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Setter
-public class Servico extends BaseEmpresaEntity {
+public class Servico extends BaseComponenteEntity {
 
     @OneToMany(mappedBy = "servico")
     private List<MicroServico> microServicoList;

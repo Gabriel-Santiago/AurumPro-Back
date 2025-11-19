@@ -1,6 +1,6 @@
 package com.AurumPro.entities.componentes;
 
-import com.AurumPro.entities.base.BaseEmpresaEntity;
+import com.AurumPro.entities.base.BaseComponenteEntity;
 import com.AurumPro.entities.proposta.Proposta;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @Setter
-public class Custo extends BaseEmpresaEntity {
+public class Custo extends BaseComponenteEntity {
 
     private BigDecimal valor;
 

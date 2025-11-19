@@ -1,6 +1,6 @@
 package com.AurumPro.entities.componentes;
 
-import com.AurumPro.entities.base.BaseEmpresaEntity;
+import com.AurumPro.entities.base.BaseComponenteEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @Setter
-public class Convenio extends BaseEmpresaEntity {
+public class Convenio extends BaseComponenteEntity {
 
 }

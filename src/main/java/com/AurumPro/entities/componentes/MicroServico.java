@@ -1,6 +1,6 @@
 package com.AurumPro.entities.componentes;
 
-import com.AurumPro.entities.base.BaseEmpresaEntity;
+import com.AurumPro.entities.base.BaseComponenteEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @Setter
-public class MicroServico extends BaseEmpresaEntity {
+public class MicroServico extends BaseComponenteEntity {
 
     private BigDecimal valorHora;
     private BigDecimal qtdHora;
