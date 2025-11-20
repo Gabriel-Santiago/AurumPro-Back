@@ -7,9 +7,7 @@ import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.componentes.MicroServico;
 import com.AurumPro.entities.componentes.Servico;
-import com.AurumPro.entities.proposta.ItemProposta;
 import com.AurumPro.entities.proposta.Proposta;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -63,7 +61,4 @@ public class Empresa extends BaseEntity{
 
     @OneToMany(mappedBy = "empresa")
     private List<Proposta> propostas;
-
-    @OneToMany(mappedBy = "proposta", cascade = CascadeType.ALL)
-    private ItemProposta itemProposta;
 }
