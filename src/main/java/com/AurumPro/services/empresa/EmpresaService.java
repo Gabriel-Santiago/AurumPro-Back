@@ -132,8 +132,6 @@ public class EmpresaService {
         empresa.setCidade(endereco.localidade());
         empresa.setEstado(endereco.uf());
         empresa.setNumero(dto.numero());
-
-        repository.save(empresa);
     }
 
     @Transactional
@@ -141,8 +139,6 @@ public class EmpresaService {
         Empresa empresa = validadeId.validate(dto.id(), repository);
 
         empresa.setTelefone(dto.telefone());
-
-        repository.save(empresa);
     }
 
     @Transactional
@@ -150,8 +146,6 @@ public class EmpresaService {
         Empresa empresa = validadeId.validate(dto.id(), repository);
 
         empresa.setEmail(dto.email());
-
-        repository.save(empresa);
     }
 
     @Transactional
