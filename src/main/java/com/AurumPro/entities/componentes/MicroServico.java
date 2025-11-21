@@ -23,6 +23,7 @@ public class MicroServico extends BaseComponenteEntity {
     private BigDecimal valorHora;
     private BigDecimal qtdHora;
     private BigDecimal valorTotal;
+    private String descricao;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "servicoId")

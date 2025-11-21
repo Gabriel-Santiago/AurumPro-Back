@@ -7,6 +7,7 @@ public record CreateMicroServicoDTO(
         Long servicoId,
         String nome,
         BigDecimal valorHora,
-        BigDecimal qtdHora
+        BigDecimal qtdHora,
+        String descricao
 ) {
 }

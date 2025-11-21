@@ -45,6 +45,7 @@ public class MicroServicoService {
         microServico.setNome(dto.nome());
         microServico.setValorHora(dto.valorHora());
         microServico.setQtdHora(dto.qtdHora());
+        microServico.setDescricao(dto.descricao());
 
         BigDecimal valorTotal = dto.valorHora().multiply(dto.qtdHora());
         microServico.setValorTotal(valorTotal);
