@@ -2,6 +2,7 @@ package com.AurumPro.services.componentes;
 
 import com.AurumPro.dtos.componentes.microServico.CreateMicroServicoDTO;
 import com.AurumPro.dtos.componentes.microServico.MicroServicoDTO;
+import com.AurumPro.dtos.componentes.microServico.UpdateValoresMicroServicoDTO;
 import com.AurumPro.entities.componentes.MicroServico;
 import com.AurumPro.entities.componentes.Servico;
 import com.AurumPro.entities.empresa.Empresa;
@@ -65,5 +66,27 @@ public class MicroServicoService {
                         dto.getNome()
                 ))
                 .toList();
+    }
+
+    @Transactional
+    public void updateMicroServico(UpdateValoresMicroServicoDTO dto){
+        Empresa empresa = empresaRepository
+                .findById(dto.id())
+                .orElseThrow(EmpresaNotFoundException::new);
+
+        MicroServico microServico = repository
+                .findById(dto.id())
+                .orElseThrow(MicroServicoNotFoundEmpresaException::new);
+
+        if (!microServico.getEmpresa().getId().equals(empresa.getId())){
+            throw new MicroServicoNotFoundEmpresaException();
+        }
+
+        microServico.setValorTotal(dto.valorHora());
+        microServico.setQtdHora(dto.qtdHora());
+
+        BigDecimal valorTotal = dto.valorHora().multiply(dto.qtdHora());
+
+        microServico.setValorTotal(valorTotal);
     }
 }
