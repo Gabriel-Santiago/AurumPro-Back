@@ -71,7 +71,7 @@ public class MicroServicoService {
     @Transactional
     public void updateMicroServico(UpdateValoresMicroServicoDTO dto){
         Empresa empresa = empresaRepository
-                .findById(dto.id())
+                .findById(dto.empresaId())
                 .orElseThrow(EmpresaNotFoundException::new);
 
         MicroServico microServico = repository
