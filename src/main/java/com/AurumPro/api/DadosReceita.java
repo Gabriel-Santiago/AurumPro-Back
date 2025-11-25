@@ -1,4 +1,4 @@
-package com.AurumPro.apis;
+package com.AurumPro.api;
 
 public record DadosReceita (
         String nome,

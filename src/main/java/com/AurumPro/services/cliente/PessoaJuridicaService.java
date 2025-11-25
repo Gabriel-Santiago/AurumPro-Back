@@ -1,9 +1,9 @@
 package com.AurumPro.services.cliente;
 
-import com.AurumPro.apis.DadosReceita;
-import com.AurumPro.apis.Endereco;
-import com.AurumPro.apis.ReceitaWS;
-import com.AurumPro.apis.ViaCep;
+import com.AurumPro.api.DadosReceita;
+import com.AurumPro.api.Endereco;
+import com.AurumPro.api.ReceitaWS;
+import com.AurumPro.api.ViaCep;
 import com.AurumPro.dtos.cliente.pj.CreatePessoaJuridicaDTO;
 import com.AurumPro.dtos.cliente.pj.DeletePessoaJuridicaDTO;
 import com.AurumPro.dtos.cliente.pj.FindPessoaJuridicaByUfDTO;

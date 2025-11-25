@@ -1,4 +1,4 @@
-package com.AurumPro.apis;
+package com.AurumPro.api;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

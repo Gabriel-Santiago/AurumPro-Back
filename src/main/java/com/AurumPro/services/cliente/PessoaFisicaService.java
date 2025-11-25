@@ -1,7 +1,7 @@
 package com.AurumPro.services.cliente;
 
-import com.AurumPro.apis.Endereco;
-import com.AurumPro.apis.ViaCep;
+import com.AurumPro.api.Endereco;
+import com.AurumPro.api.ViaCep;
 import com.AurumPro.dtos.cliente.pf.CreatePessoaFisicaDTO;
 import com.AurumPro.dtos.cliente.pf.DeletePessoaFisicaDTO;
 import com.AurumPro.dtos.cliente.pf.FindPessoaFisicaByUfDTO;

@@ -33,7 +33,7 @@ public class MicroServicoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{servicoId")
+    @GetMapping("/{servicoId}")
     public ResponseEntity<List<MicroServicoDTO>> findAllMicroServico(@PathVariable("servicoId") Long servicoId){
         return new ResponseEntity<>(service.findAll(servicoId),
                 HttpStatus.OK);
