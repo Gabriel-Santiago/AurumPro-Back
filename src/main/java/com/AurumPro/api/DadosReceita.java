@@ -1,7 +1,6 @@
 package com.AurumPro.apis;
 
 public record DadosReceita (
-        String cnpj,
         String nome,
 
         String cep,
