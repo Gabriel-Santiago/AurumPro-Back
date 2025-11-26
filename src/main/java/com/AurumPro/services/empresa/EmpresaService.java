@@ -7,6 +7,7 @@ import com.AurumPro.api.ViaCep;
 import com.AurumPro.dtos.empresa.CreateEmpresaDTO;
 import com.AurumPro.dtos.empresa.DeleteEmpresaDTO;
 import com.AurumPro.dtos.empresa.EmpresaDTO;
+import com.AurumPro.dtos.empresa.LoginEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateCepEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateEmailEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateTelefoneEmpresaDTO;
@@ -41,6 +42,31 @@ public class EmpresaService {
         this.validateCep = validateCep;
         this.validadeId = validadeId;
         this.viaCep = viaCep;
+    }
+
+    public EmpresaDTO login(LoginEmpresaDTO dto){
+        Empresa empresa = repository.findByEmailAndSenha(dto.email(), dto.senha())
+                .orElseThrow(EmpresaNotFoundException::new);
+
+        if (!empresa.getSenha().equals(dto.senha())){
+            throw new SenhaEmpresaIncorretException();
+        }
+
+        return new EmpresaDTO(
+                empresa.getId(),
+                empresa.getEmail(),
+                empresa.getNome(),
+                empresa.getCnpj(),
+                empresa.getInscricaoMunicipal(),
+                empresa.getResponsavel(),
+                empresa.getTelefone(),
+                empresa.getCep(),
+                empresa.getRua(),
+                empresa.getBairro(),
+                empresa.getCidade(),
+                empresa.getEstado(),
+                empresa.getNumero()
+        );
     }
 
     @Transactional

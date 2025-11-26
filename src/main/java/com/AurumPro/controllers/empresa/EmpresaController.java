@@ -3,6 +3,7 @@ package com.AurumPro.controllers.empresa;
 import com.AurumPro.dtos.empresa.CreateEmpresaDTO;
 import com.AurumPro.dtos.empresa.DeleteEmpresaDTO;
 import com.AurumPro.dtos.empresa.EmpresaDTO;
+import com.AurumPro.dtos.empresa.LoginEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateCepEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateEmailEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateTelefoneEmpresaDTO;
@@ -28,6 +29,12 @@ public class EmpresaController {
 
     public EmpresaController(EmpresaService service) {
         this.service = service;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<EmpresaDTO> login(@RequestBody LoginEmpresaDTO dto){
+        return new ResponseEntity<>(service.login(dto),
+                HttpStatus.ACCEPTED);
     }
 
     @PostMapping
