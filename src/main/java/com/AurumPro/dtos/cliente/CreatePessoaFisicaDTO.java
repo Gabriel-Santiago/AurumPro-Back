@@ -1,4 +1,4 @@
-package com.AurumPro.dtos.cliente.pf;
+package com.AurumPro.dtos.cliente;
 
 import java.time.LocalDate;
 

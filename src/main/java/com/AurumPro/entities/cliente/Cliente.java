@@ -1,21 +1,28 @@
-package com.AurumPro.entities.base;
+package com.AurumPro.entities.cliente;
 
+import com.AurumPro.entities.base.BaseEntity;
 import com.AurumPro.entities.empresa.Empresa;
+import com.AurumPro.enums.TipoPessoa;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "cliente")
+@AllArgsConstructor
 @Getter
+@NoArgsConstructor
 @Setter
-public abstract class ClienteEntity extends BaseEntity{
+public class Cliente extends BaseEntity {
 
     private String email;
 
@@ -32,6 +39,15 @@ public abstract class ClienteEntity extends BaseEntity{
     private String estado;
 
     private String numero;
+
+    @Enumerated(EnumType.STRING)
+    private TipoPessoa tipoPessoa;
+
+    private LocalDate dataNascimento;
+    private Integer idade;
+    private String cpf;
+
+    private String cnpj;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "empresaId")

@@ -1,8 +1,7 @@
 package com.AurumPro.entities.empresa;
 
 import com.AurumPro.entities.base.BaseEntity;
-import com.AurumPro.entities.cliente.PessoaFisica;
-import com.AurumPro.entities.cliente.PessoaJuridica;
+import com.AurumPro.entities.cliente.Cliente;
 import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.componentes.MicroServico;
@@ -42,10 +41,7 @@ public class Empresa extends BaseEntity{
     private String numero;
 
     @OneToMany(mappedBy = "empresa")
-    private List<PessoaFisica> pessoaFisicaList;
-
-    @OneToMany(mappedBy = "empresa")
-    private List<PessoaJuridica> pessoaJuridicaList;
+    private List<Cliente> clienteList;
 
     @OneToMany(mappedBy = "empresa")
     private List<Servico> servicos;

@@ -1,15 +1,19 @@
-package com.AurumPro.dtos.cliente.pf;
+package com.AurumPro.dtos.cliente;
 
-public record PessoaFisicaDTO(
+import com.AurumPro.enums.TipoPessoa;
+
+public record ClienteDTO (
         Long id,
         String nome,
         String email,
         String telefone,
         Integer idade,
+        String cnpj,
         String cep,
         String uf,
         String localidade,
         String bairro,
-        String logradouro
-) {
+        String logradouro,
+        TipoPessoa tipoPessoa
+){
 }

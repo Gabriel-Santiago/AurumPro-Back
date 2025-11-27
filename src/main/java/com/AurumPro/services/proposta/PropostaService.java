@@ -3,7 +3,7 @@ package com.AurumPro.services.proposta;
 import com.AurumPro.dtos.proposta.CreatePropostaDTO;
 import com.AurumPro.dtos.proposta.FindPropostaByClienteDTO;
 import com.AurumPro.dtos.proposta.PropostaDTO;
-import com.AurumPro.entities.base.ClienteEntity;
+import com.AurumPro.entities.cliente.Cliente;
 import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.empresa.Empresa;
@@ -57,7 +57,7 @@ public class PropostaService {
         Empresa empresa = empresaRepository.findById(dto.empresaId())
                 .orElseThrow(EmpresaNotFoundException::new);
 
-        ClienteEntity cliente = clienteRepository.findById(dto.clienteId())
+        Cliente cliente = clienteRepository.findById(dto.clienteId())
                 .orElseThrow(ClienteNotFoundException::new);
 
         Convenio convenio = convenioRepository.findById(dto.convenioId())

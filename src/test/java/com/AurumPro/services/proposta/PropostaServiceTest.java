@@ -3,7 +3,7 @@ package com.AurumPro.services.proposta;
 import com.AurumPro.dtos.proposta.CreatePropostaDTO;
 import com.AurumPro.dtos.proposta.FindPropostaByClienteDTO;
 import com.AurumPro.dtos.proposta.PropostaDTO;
-import com.AurumPro.entities.base.ClienteEntity;
+import com.AurumPro.entities.cliente.Cliente;
 import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.empresa.Empresa;
@@ -72,7 +72,7 @@ class PropostaServiceTest {
         );
 
         Empresa empresa = mock(Empresa.class);
-        ClienteEntity cliente = mock(ClienteEntity.class);
+        Cliente cliente = mock(Cliente.class);
         Convenio convenio = mock(Convenio.class);
 
         Custo custo1 = mock(Custo.class);
@@ -125,7 +125,7 @@ class PropostaServiceTest {
         );
 
         Empresa empresa = mock(Empresa.class);
-        ClienteEntity cliente = mock(ClienteEntity.class);
+        Cliente cliente = mock(Cliente.class);
         Convenio convenio = mock(Convenio.class);
 
         Custo custo1 = mock(Custo.class);
@@ -178,7 +178,7 @@ class PropostaServiceTest {
         );
 
         Empresa empresa = mock(Empresa.class);
-        ClienteEntity cliente = mock(ClienteEntity.class);
+        Cliente cliente = mock(Cliente.class);
         Convenio convenio = mock(Convenio.class);
 
         Custo custo1 = mock(Custo.class);
@@ -223,8 +223,8 @@ class PropostaServiceTest {
         Proposta proposta2 = mock(Proposta.class);
         List<Proposta> propostaList = Arrays.asList(proposta1, proposta2);
 
-        ClienteEntity cliente1 = mock(ClienteEntity.class);
-        ClienteEntity cliente2 = mock(ClienteEntity.class);
+        Cliente cliente1 = mock(Cliente.class);
+        Cliente cliente2 = mock(Cliente.class);
         Convenio convenio1 = mock(Convenio.class);
         Convenio convenio2 = mock(Convenio.class);
 
@@ -260,7 +260,7 @@ class PropostaServiceTest {
         Proposta proposta = mock(Proposta.class);
         List<Proposta> propostaList = Arrays.asList(proposta);
 
-        ClienteEntity cliente = mock(ClienteEntity.class);
+        Cliente cliente = mock(Cliente.class);
         Convenio convenio = mock(Convenio.class);
 
         when(proposta.getCliente()).thenReturn(cliente);

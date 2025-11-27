@@ -1,9 +1,8 @@
 package com.AurumPro.repositories.cliente;
 
-import com.AurumPro.entities.base.ClienteEntity;
-import com.AurumPro.entities.cliente.PessoaFisica;
-import com.AurumPro.entities.cliente.PessoaJuridica;
+import com.AurumPro.entities.cliente.Cliente;
 import com.AurumPro.entities.empresa.Empresa;
+import com.AurumPro.enums.TipoPessoa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,37 +12,17 @@ import java.util.List;
 
 
 @Repository
-public interface ClienteRepository extends JpaRepository<ClienteEntity, Long>{
+public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 
     @Query("""
-            SELECT pf
-            FROM PessoaFisica pf
-            WHERE pf.empresa = :empresa
-                AND pf.estado = :estado
+            SELECT c
+            FROM Cliente c
+            WHERE c.empresa = :empresa
+                AND c.estado = :estado
+                AND c.tipoPessoa = :tipoPessoa
             """)
-    List<PessoaFisica> findPessoFisicaByEmpresaAndEstado(@Param("empresa") Empresa empresa,
-                                              @Param("estado") String estado);
+    List<Cliente> findTipoPessoaByEstado(@Param("empresa") Empresa empresa,
+                                         @Param("estado") String estado,
+                                         @Param("tipoPessoa")TipoPessoa tipoPessoa);
 
-    @Query("""
-            SELECT pj
-            FROM PessoaJuridica pj
-            WHERE pj.empresa = :empresa
-                AND pj.estado = :estado
-            """)
-    List<PessoaJuridica> findPessoaJuridicaByEmpresaAndEstado(@Param("empresa") Empresa empresa,
-                                                @Param("estado") String estado);
-
-    @Query("""
-            SELECT pf
-            FROM PessoaFisica pf
-            WHERE pf.empresa.id = :empresaId
-            """)
-    List<PessoaFisica> findAllPessoaFisica(@Param("empresaId") Long empresaId);
-
-    @Query("""
-            SELECT pj
-            FROM PessoaJuridica pj
-            WHERE pj.empresa.id = :empresaId
-            """)
-    List<PessoaJuridica> findAllPessoaJuridica(@Param("empresaId") Long empresaId);
 }
