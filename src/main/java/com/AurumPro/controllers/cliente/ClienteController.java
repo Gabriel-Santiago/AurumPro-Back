@@ -45,8 +45,8 @@ public class ClienteController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ClienteDTO>> findAllPessoaFisica(@PathVariable("empresaId") Long empresaId) {
+    @GetMapping("/{empresaId}")
+    public ResponseEntity<List<ClienteDTO>> findAllCliente(@PathVariable("empresaId") Long empresaId) {
         return new ResponseEntity<>(service.findAllCliente(empresaId),
                 HttpStatus.OK);
     }

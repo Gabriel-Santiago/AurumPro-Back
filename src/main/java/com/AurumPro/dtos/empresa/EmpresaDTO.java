@@ -1,7 +1,7 @@
 package com.AurumPro.dtos.empresa;
 
 public record EmpresaDTO(
-        Long id,
+        Long empresaId,
         String email,
         String nome,
         String cnpj,

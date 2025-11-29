@@ -37,11 +37,16 @@ public class ServicoService {
         repository.save(servico);
     }
 
-    public List<ServicoDTO> findAll(){
+    public List<ServicoDTO> findAll(Long empresaId){
+        empresaRepository
+                .findById(empresaId)
+                .orElseThrow(EmpresaNotFoundException::new);
+
         return repository
                 .findAll()
                 .stream()
                 .map(dto -> new ServicoDTO(
+                        dto.getId(),
                         dto.getNome()
                 ))
                 .toList();
