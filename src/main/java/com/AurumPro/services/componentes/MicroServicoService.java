@@ -44,12 +44,7 @@ public class MicroServicoService {
 
         MicroServico microServico = new MicroServico();
         microServico.setNome(dto.nome());
-        microServico.setValorHora(dto.valorHora());
-        microServico.setQtdHora(dto.qtdHora());
         microServico.setDescricao(dto.descricao());
-
-        BigDecimal valorTotal = dto.valorHora().multiply(dto.qtdHora());
-        microServico.setValorTotal(valorTotal);
 
         microServico.setEmpresa(empresa);
         microServico.setServico(servico);
@@ -63,6 +58,7 @@ public class MicroServicoService {
         return microServicoList
                 .stream()
                 .map(dto -> new MicroServicoDTO(
+                        dto.getId(),
                         dto.getNome()
                 ))
                 .toList();

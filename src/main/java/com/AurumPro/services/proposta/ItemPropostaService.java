@@ -1,15 +1,17 @@
 package com.AurumPro.services.proposta;
 
 import com.AurumPro.dtos.proposta.CreateItemPropostaDTO;
+import com.AurumPro.dtos.proposta.ItemPropostaDTO;
 import com.AurumPro.entities.componentes.MicroServico;
 import com.AurumPro.entities.componentes.Servico;
 import com.AurumPro.entities.proposta.ItemProposta;
 import com.AurumPro.repositories.componentes.MicroServicoRepository;
 import com.AurumPro.repositories.componentes.ServicoRepository;
 import com.AurumPro.repositories.proposta.ItemPropostaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Service
 public class ItemPropostaService {
@@ -26,19 +28,41 @@ public class ItemPropostaService {
         this.servicoRepository = servicoRepository;
     }
 
-    public void createItemProposta(CreateItemPropostaDTO dto) {
+    @Transactional
+    public ItemPropostaDTO createItemProposta(CreateItemPropostaDTO dto) {
         Servico servico = servicoRepository.findById(dto.servicoId())
                 .orElseThrow();
 
-        List<MicroServico> microServicoList = microServicoRepository.findAllById(dto.microServicoId());
+        MicroServico microServico = microServicoRepository.findById(dto.microServicoId())
+                .orElseThrow();
 
-        for (MicroServico microServico : microServicoList){
-            ItemProposta itemProposta = new ItemProposta();
-            itemProposta.setServico(servico);
-            itemProposta.setMicroServico(microServico);
-            itemProposta.setValorTotal(microServico.getValorTotal());
+        ItemProposta itemProposta = getItemProposta(dto, microServico, servico);
 
-            repository.save(itemProposta);
+        ItemProposta itemPropostaSalva = repository.save(itemProposta);
+
+        return new ItemPropostaDTO(
+                itemPropostaSalva.getItemPropostaId(),
+                itemPropostaSalva.getServico().getId(),
+                itemPropostaSalva.getMicroServico().getId(),
+                itemPropostaSalva.getMicroServico().getValorHora(),
+                itemPropostaSalva.getMicroServico().getQtdHora(),
+                itemPropostaSalva.getValorTotal()
+        );
+    }
+
+    private static ItemProposta getItemProposta(CreateItemPropostaDTO dto, MicroServico microServico, Servico servico) {
+        BigDecimal valorHora = dto.valorHora() != null ? dto.valorHora() : microServico.getValorHora();
+        BigDecimal quantidadeHoras = dto.quantidadeHoras() != null ? dto.quantidadeHoras() : microServico.getQtdHora();
+        BigDecimal valorTotal = dto.valorTotal() != null ? dto.valorTotal() : microServico.getValorTotal();
+
+        if (valorTotal == null && valorHora != null && quantidadeHoras != null) {
+            valorTotal = valorHora.multiply(quantidadeHoras);
         }
+
+        ItemProposta itemProposta = new ItemProposta();
+        itemProposta.setServico(servico);
+        itemProposta.setMicroServico(microServico);
+        itemProposta.setValorTotal(valorTotal != null ? valorTotal : BigDecimal.ZERO);
+        return itemProposta;
     }
 }

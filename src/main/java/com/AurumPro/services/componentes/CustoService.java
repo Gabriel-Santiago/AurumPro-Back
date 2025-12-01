@@ -1,6 +1,7 @@
 package com.AurumPro.services.componentes;
 
 import com.AurumPro.dtos.componentes.custo.CreateCustoDTO;
+import com.AurumPro.dtos.componentes.custo.CustoDTO;
 import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
@@ -20,7 +21,7 @@ public class CustoService{
         this.empresaRepository = empresaRepository;
     }
 
-    public void createCusto(CreateCustoDTO dto){
+    public CustoDTO createCusto(CreateCustoDTO dto){
         Empresa empresa = empresaRepository
                 .findById(dto.empresaId())
                 .orElseThrow(EmpresaNotFoundException::new);
@@ -31,6 +32,12 @@ public class CustoService{
 
         custo.setEmpresa(empresa);
 
-        repository.save(custo);
+        Custo custoSalvo = repository.save(custo);
+
+        return new CustoDTO(
+                custoSalvo.getId(),
+                custo.getNome(),
+                custoSalvo.getValor()
+        );
     }
 }

@@ -1,6 +1,7 @@
 package com.AurumPro.controllers.proposta;
 
 import com.AurumPro.dtos.proposta.CreateItemPropostaDTO;
+import com.AurumPro.dtos.proposta.ItemPropostaDTO;
 import com.AurumPro.services.proposta.ItemPropostaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class ItemPropostaController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createItemProposta(@RequestBody CreateItemPropostaDTO dto){
-        service.createItemProposta(dto);
+    public ResponseEntity<ItemPropostaDTO> createItemProposta(@RequestBody CreateItemPropostaDTO dto){
+        ItemPropostaDTO itemPropostaDTO = service.createItemProposta(dto);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(itemPropostaDTO);
     }
 }

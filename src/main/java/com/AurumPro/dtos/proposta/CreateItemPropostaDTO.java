@@ -1,9 +1,12 @@
 package com.AurumPro.dtos.proposta;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 public record CreateItemPropostaDTO(
         Long servicoId,
-        List<Long> microServicoId
+        Long microServicoId,
+        BigDecimal valorHora,
+        BigDecimal quantidadeHoras,
+        BigDecimal valorTotal
 ) {
 }

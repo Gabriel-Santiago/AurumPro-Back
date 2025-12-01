@@ -43,6 +43,7 @@ public class ConvenioService{
         return convenioList
                 .stream()
                 .map(dto -> new ConvenioDTO(
+                        dto.getId(),
                         dto.getNome()
                 ))
                 .toList();

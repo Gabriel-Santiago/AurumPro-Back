@@ -1,6 +1,7 @@
 package com.AurumPro.controllers.componentes;
 
 import com.AurumPro.dtos.componentes.custo.CreateCustoDTO;
+import com.AurumPro.dtos.componentes.custo.CustoDTO;
 import com.AurumPro.services.componentes.CustoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class CustoController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createCusto(@RequestBody CreateCustoDTO dto){
-        service.createCusto(dto);
+    public ResponseEntity<CustoDTO> createCusto(@RequestBody CreateCustoDTO dto){
+        CustoDTO custoDTO = service.createCusto(dto);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(custoDTO);
     }
 }
