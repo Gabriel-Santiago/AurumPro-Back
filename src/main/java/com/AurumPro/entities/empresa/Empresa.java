@@ -7,6 +7,7 @@ import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.componentes.MicroServico;
 import com.AurumPro.entities.componentes.Servico;
 import com.AurumPro.entities.proposta.Proposta;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -40,21 +41,24 @@ public class Empresa extends BaseEntity{
     private String estado;
     private String numero;
 
-    @OneToMany(mappedBy = "empresa")
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cliente> clienteList;
 
-    @OneToMany(mappedBy = "empresa")
-    private List<Servico> servicos;
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Servico> servicoList;
 
-    @OneToMany(mappedBy = "empresa")
-    private List<MicroServico> microservicos;
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MicroServico> microservicoList;
 
-    @OneToMany(mappedBy = "empresa")
-    private List<Convenio> convenios;
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Convenio> convenioList;
 
-    @OneToMany(mappedBy = "empresa")
-    private List<Custo> custos;
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Custo> custoList;
 
-    @OneToMany(mappedBy = "empresa")
-    private List<Proposta> propostas;
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Proposta> propostaList;
+
+    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consultor> consultorList;
 }
