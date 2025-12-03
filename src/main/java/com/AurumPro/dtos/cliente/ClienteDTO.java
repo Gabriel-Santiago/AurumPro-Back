@@ -4,6 +4,7 @@ import com.AurumPro.enums.TipoPessoa;
 
 public record ClienteDTO (
         Long id,
+        String responsavel,
         String nome,
         String email,
         String telefone,

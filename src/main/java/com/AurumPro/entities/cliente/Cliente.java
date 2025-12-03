@@ -2,12 +2,15 @@ package com.AurumPro.entities.cliente;
 
 import com.AurumPro.entities.base.BaseEntity;
 import com.AurumPro.entities.empresa.Empresa;
+import com.AurumPro.entities.proposta.Proposta;
 import com.AurumPro.enums.TipoPessoa;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "cliente")
@@ -48,8 +52,13 @@ public class Cliente extends BaseEntity {
     private String cpf;
 
     private String cnpj;
+    private String responsavel;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "empresaId")
     private Empresa empresa;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Proposta> propostas;
+
 }

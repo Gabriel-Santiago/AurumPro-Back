@@ -123,6 +123,7 @@ public class ClienteService {
                 .stream()
                 .map(dto -> new ClienteDTO(
                         dto.getId(),
+                        dto.getResponsavel(),
                         dto.getNome(),
                         dto.getEmail(),
                         dto.getTelefone(),
@@ -149,6 +150,7 @@ public class ClienteService {
                 .stream()
                 .map(c -> new ClienteDTO(
                         c.getId(),
+                        c.getResponsavel(),
                         c.getNome(),
                         c.getEmail(),
                         c.getTelefone(),
@@ -205,9 +207,10 @@ public class ClienteService {
 
     private static Cliente getPessoaJuridica(CreatePessoaJuridicaDTO dto, DadosReceita dadosReceita, Empresa empresa) {
         Cliente pessoaJuridica = new Cliente();
-        pessoaJuridica.setNome(dto.nome());
         pessoaJuridica.setEmail(dto.email());
         pessoaJuridica.setCnpj(dto.cnpj());
+        pessoaJuridica.setNome(dadosReceita.nome());
+        pessoaJuridica.setResponsavel(dto.responsavel());
         pessoaJuridica.setTelefone(dadosReceita.telefone());
 
         pessoaJuridica.setCep(dadosReceita.cep());
