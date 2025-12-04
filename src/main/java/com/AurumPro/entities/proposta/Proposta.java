@@ -3,7 +3,7 @@ package com.AurumPro.entities.proposta;
 import com.AurumPro.entities.cliente.Cliente;
 import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
-import com.AurumPro.entities.empresa.Consultor;
+import com.AurumPro.entities.empresa.Colaborador;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.enums.TipoDesconto;
 import jakarta.persistence.CascadeType;
@@ -69,5 +69,5 @@ public class Proposta {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "consultorId")
-    private Consultor consultor;
+    private Colaborador colaborador;
 }

@@ -6,7 +6,7 @@ import com.AurumPro.dtos.proposta.PropostaDTO;
 import com.AurumPro.entities.cliente.Cliente;
 import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
-import com.AurumPro.entities.empresa.Consultor;
+import com.AurumPro.entities.empresa.Colaborador;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.entities.proposta.ItemProposta;
 import com.AurumPro.entities.proposta.Proposta;
@@ -19,7 +19,7 @@ import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.cliente.ClienteRepository;
 import com.AurumPro.repositories.componentes.ConvenioRepository;
 import com.AurumPro.repositories.componentes.CustoRepository;
-import com.AurumPro.repositories.empresa.ConsultorRepository;
+import com.AurumPro.repositories.empresa.ColaboradorRepository;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
 import com.AurumPro.repositories.proposta.ItemPropostaRepository;
 import com.AurumPro.repositories.proposta.PropostaRepository;
@@ -34,7 +34,7 @@ import java.util.List;
 @Service
 public class PropostaService {
 
-    private final ConsultorRepository consultorRepository;
+    private final ColaboradorRepository colaboradorRepository;
     private final ConvenioRepository convenioRepository;
     private final CustoRepository custoRepository;
     private final ClienteRepository clienteRepository;
@@ -42,14 +42,14 @@ public class PropostaService {
     private final ItemPropostaRepository itemPropostaRepository;
     private final PropostaRepository repository;
 
-    public PropostaService(ConsultorRepository consultorRepository,
+    public PropostaService(ColaboradorRepository colaboradorRepository,
                            ConvenioRepository convenioRepository,
                            CustoRepository custoRepository,
                            ClienteRepository clienteRepository,
                            EmpresaRepository empresaRepository,
                            ItemPropostaRepository itemPropostaRepository,
                            PropostaRepository repository) {
-        this.consultorRepository = consultorRepository;
+        this.colaboradorRepository = colaboradorRepository;
         this.convenioRepository = convenioRepository;
         this.custoRepository = custoRepository;
         this.clienteRepository = clienteRepository;
@@ -70,13 +70,13 @@ public class PropostaService {
         Convenio convenio = convenioRepository.findById(dto.convenioId())
                 .orElseThrow(ConvenioNotFoundException::new);
 
-        Consultor consultor = null;
+        Colaborador colaborador = null;
 
         if (dto.consultorId() != null) {
-            consultor = consultorRepository.findById(dto.consultorId())
+            colaborador = colaboradorRepository.findById(dto.consultorId())
                     .orElseThrow(ConsultorNotFoundException::new);
 
-            if (!consultor.getEmpresa().getId().equals(empresa.getId())){
+            if (!colaborador.getEmpresa().getId().equals(empresa.getId())){
                 throw new ConsultorNotFoundEmpresaException();
             }
         }
@@ -99,7 +99,7 @@ public class PropostaService {
         proposta.setEmpresa(empresa);
         proposta.setCliente(cliente);
         proposta.setConvenio(convenio);
-        proposta.setConsultor(consultor);
+        proposta.setColaborador(colaborador);
         proposta.setCustoList(custoList);
         proposta.setItemPropostaList(itemPropostaList);
         

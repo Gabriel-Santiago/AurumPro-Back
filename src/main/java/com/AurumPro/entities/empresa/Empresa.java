@@ -60,5 +60,5 @@ public class Empresa extends BaseEntity{
     private List<Proposta> propostaList;
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Consultor> consultorList;
+    private List<Colaborador> colaboradorList;
 }

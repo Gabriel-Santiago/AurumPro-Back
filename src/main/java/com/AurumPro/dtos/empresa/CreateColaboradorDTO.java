@@ -1,11 +1,9 @@
 package com.AurumPro.dtos.empresa;
 
-import com.AurumPro.enums.TipoConsultor;
-
-public record CreateConsultorDTO(
+public record CreateColaboradorDTO(
         Long empresaId,
         String nome,
         String telefone,
-        TipoConsultor tipoConsultor
+        String funcao
 ) {
 }

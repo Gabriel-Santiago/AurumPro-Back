@@ -1,10 +1,7 @@
 package com.AurumPro.entities.empresa;
 
 import com.AurumPro.entities.base.BaseEntity;
-import com.AurumPro.enums.TipoConsultor;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -14,17 +11,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "consultor")
+@Table(name = "colaborador")
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
 @Setter
-public class Consultor extends BaseEntity {
+public class Colaborador extends BaseEntity {
 
     private String telefone;
 
-    @Enumerated(EnumType.STRING)
-    private TipoConsultor tipoConsultor;
+    private String funcao;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "empresaId")
