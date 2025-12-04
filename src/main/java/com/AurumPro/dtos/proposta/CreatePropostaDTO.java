@@ -9,7 +9,7 @@ public record CreatePropostaDTO(
         Long empresaId,
         Long clienteId,
         Long convenioId,
-        Long consultorId,
+        Long colaboradorId,
         List<Long> custoList,
         List<Long> itemPropostaList,
         TipoDesconto tipoDesconto,

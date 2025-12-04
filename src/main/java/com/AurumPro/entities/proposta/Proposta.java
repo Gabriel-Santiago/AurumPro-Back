@@ -67,7 +67,7 @@ public class Proposta {
     @OneToMany(mappedBy = "proposta", cascade = CascadeType.ALL)
     private List<ItemProposta> itemPropostaList;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "consultorId")
+    @ManyToOne
+    @JoinColumn(name = "colaboradorId")
     private Colaborador colaborador;
 }

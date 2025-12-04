@@ -13,8 +13,8 @@ import com.AurumPro.entities.proposta.Proposta;
 import com.AurumPro.enums.TipoDesconto;
 import com.AurumPro.exceptions.cliente.ClienteNotFoundException;
 import com.AurumPro.exceptions.componentes.ConvenioNotFoundException;
-import com.AurumPro.exceptions.empresa.ConsultorNotFoundEmpresaException;
-import com.AurumPro.exceptions.empresa.ConsultorNotFoundException;
+import com.AurumPro.exceptions.empresa.ColaboradorNotFoundEmpresaException;
+import com.AurumPro.exceptions.empresa.ColaboradorNotFoundException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.cliente.ClienteRepository;
 import com.AurumPro.repositories.componentes.ConvenioRepository;
@@ -72,12 +72,12 @@ public class PropostaService {
 
         Colaborador colaborador = null;
 
-        if (dto.consultorId() != null) {
-            colaborador = colaboradorRepository.findById(dto.consultorId())
-                    .orElseThrow(ConsultorNotFoundException::new);
+        if (dto.colaboradorId() != null) {
+            colaborador = colaboradorRepository.findById(dto.colaboradorId())
+                    .orElseThrow(ColaboradorNotFoundException::new);
 
             if (!colaborador.getEmpresa().getId().equals(empresa.getId())){
-                throw new ConsultorNotFoundEmpresaException();
+                throw new ColaboradorNotFoundEmpresaException();
             }
         }
 
