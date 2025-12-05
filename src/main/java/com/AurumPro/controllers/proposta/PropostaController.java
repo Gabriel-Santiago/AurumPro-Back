@@ -1,7 +1,6 @@
 package com.AurumPro.controllers.proposta;
 
 import com.AurumPro.dtos.proposta.CreatePropostaDTO;
-import com.AurumPro.dtos.proposta.FindPropostaByClienteDTO;
 import com.AurumPro.dtos.proposta.PropostaDTO;
 import com.AurumPro.services.proposta.PropostaService;
 import org.springframework.http.HttpStatus;
@@ -38,9 +37,10 @@ public class PropostaController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/clientes")
-    public ResponseEntity<List<PropostaDTO>> findPropostaByCliente(@RequestBody FindPropostaByClienteDTO dto){
-        return new ResponseEntity<>(service.findPropostaByCliente(dto),
+    @GetMapping("/{empresaId}/{clienteId}")
+    public ResponseEntity<List<PropostaDTO>> findPropostaByCliente(@PathVariable("empresaId") Long empresaId,
+                                                                   @PathVariable("clienteId") Long clienteId){
+        return new ResponseEntity<>(service.findPropostaByCliente(empresaId, clienteId),
                 HttpStatus.OK);
     }
 }

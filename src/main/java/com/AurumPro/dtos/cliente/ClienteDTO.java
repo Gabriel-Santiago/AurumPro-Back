@@ -9,6 +9,7 @@ public record ClienteDTO (
         String email,
         String telefone,
         Integer idade,
+        String cpf,
         String cnpj,
         String cep,
         String uf,

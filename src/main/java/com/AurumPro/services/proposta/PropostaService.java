@@ -1,7 +1,6 @@
 package com.AurumPro.services.proposta;
 
 import com.AurumPro.dtos.proposta.CreatePropostaDTO;
-import com.AurumPro.dtos.proposta.FindPropostaByClienteDTO;
 import com.AurumPro.dtos.proposta.PropostaDTO;
 import com.AurumPro.entities.cliente.Cliente;
 import com.AurumPro.entities.componentes.Convenio;
@@ -156,8 +155,8 @@ public class PropostaService {
                 .toList();
     }
 
-    public List<PropostaDTO> findPropostaByCliente(FindPropostaByClienteDTO dto){
-        List<Proposta> propostaList = repository.findByEmpresaIdAndClienteId(dto.empresaId(), dto.clienteId());
+    public List<PropostaDTO> findPropostaByCliente(Long empresaId, Long clienteId){
+        List<Proposta> propostaList = repository.findByEmpresaIdAndClienteId(empresaId, clienteId);
 
         return propostaList
                 .stream()
