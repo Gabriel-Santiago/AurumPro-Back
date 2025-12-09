@@ -51,4 +51,14 @@ public class ServicoService {
                 ))
                 .toList();
     }
+
+    public ServicoDTO findServico(Long id){
+        return repository
+                .findById(id)
+                .map(dto -> new ServicoDTO(
+                        dto.getId(),
+                        dto.getNome()
+                ))
+                .orElseThrow();
+    }
 }

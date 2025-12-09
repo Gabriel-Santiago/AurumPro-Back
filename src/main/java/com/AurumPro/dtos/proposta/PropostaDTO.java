@@ -1,19 +1,21 @@
 package com.AurumPro.dtos.proposta;
 
-import com.AurumPro.entities.componentes.Custo;
-import com.AurumPro.entities.proposta.ItemProposta;
+import com.AurumPro.dtos.componentes.custo.CustoDTO;
 import com.AurumPro.enums.TipoDesconto;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public record PropostaDTO(
+        Long id,
         Long clienteId,
         String nomeCliente,
         Long convenioId,
+        Long colaboradorId,
+        Long empresaId,
         String nomeConvenio,
-        List<Custo> custoList,
-        List<ItemProposta> itemPropostaList,
+        List<CustoDTO> custoList,
+        List<ItemPropostaDTO> itemPropostaList,
         TipoDesconto tipoDesconto,
         boolean desconto,
         BigDecimal valorDesconto,

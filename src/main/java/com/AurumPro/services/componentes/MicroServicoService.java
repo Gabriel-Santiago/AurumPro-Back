@@ -64,6 +64,16 @@ public class MicroServicoService {
                 .toList();
     }
 
+    public MicroServicoDTO findMicroServico(Long id){
+        return repository
+                .findById(id)
+                .map(dto -> new MicroServicoDTO(
+                        dto.getId(),
+                        dto.getNome()
+                ))
+                .orElseThrow();
+    }
+
     @Transactional
     public void updateMicroServico(UpdateValoresMicroServicoDTO dto){
         Empresa empresa = empresaRepository

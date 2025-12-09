@@ -36,4 +36,10 @@ public class ServicoController {
         return new ResponseEntity<>(service.findAll(empresaId),
                 HttpStatus.OK);
     }
+
+    @GetMapping("/listar/{id}")
+    public ResponseEntity<ServicoDTO> findServico(@PathVariable("id") Long id){
+        return new ResponseEntity<>(service.findServico(id),
+                HttpStatus.OK);
+    }
 }

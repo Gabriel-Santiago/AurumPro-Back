@@ -39,6 +39,12 @@ public class MicroServicoController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/listar/{id}")
+    public ResponseEntity<MicroServicoDTO> findMicroServico(@PathVariable("id") Long id){
+        return new ResponseEntity<>(service.findMicroServico(id),
+                HttpStatus.OK);
+    }
+
     @PatchMapping
     public ResponseEntity<Void> updateValoresMicroServico(@RequestBody UpdateValoresMicroServicoDTO dto){
         service.updateMicroServico(dto);

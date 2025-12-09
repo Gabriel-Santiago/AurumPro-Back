@@ -15,6 +15,7 @@ import com.AurumPro.entities.cliente.Cliente;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.enums.TipoPessoa;
 import com.AurumPro.exceptions.cliente.ClienteNotFoundEmpresaException;
+import com.AurumPro.exceptions.cliente.ClienteNotFoundException;
 import com.AurumPro.exceptions.cliente.PessoaJuridicaNotFoundEmpresaException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
@@ -205,6 +206,28 @@ public class ClienteService {
         }
 
         repository.delete(cliente);
+    }
+
+    public ClienteDTO findById(Long id){
+        return repository
+                .findById(id)
+                .map(dto -> new ClienteDTO(
+                        dto.getId(),
+                        dto.getResponsavel(),
+                        dto.getNome(),
+                        dto.getEmail(),
+                        dto.getTelefone(),
+                        dto.getIdade(),
+                        dto.getCpf(),
+                        dto.getCnpj(),
+                        dto.getCep(),
+                        dto.getEstado(),
+                        dto.getCidade(),
+                        dto.getBairro(),
+                        dto.getRua(),
+                        dto.getTipoPessoa()
+                ))
+                .orElseThrow(ClienteNotFoundException::new);
     }
 
     private static Cliente getPessoaJuridica(CreatePessoaJuridicaDTO dto, DadosReceita dadosReceita, Empresa empresa) {

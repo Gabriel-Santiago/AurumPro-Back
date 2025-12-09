@@ -51,6 +51,12 @@ public class ClienteController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/cliente/{id}")
+    public ResponseEntity<ClienteDTO> findCliente(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(service.findById(id),
+                HttpStatus.OK);
+    }
+
     @GetMapping("/estados")
     public ResponseEntity<List<ClienteDTO>> findClienteByTipoPessoaAndUf(@RequestBody FindTipoPessoabyUfDTO dto) {
         return new ResponseEntity<>(service.findClienteByTipoPessoaAndUf(dto),
