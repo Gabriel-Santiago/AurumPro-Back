@@ -28,6 +28,8 @@ public class ItemProposta {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long itemPropostaId;
 
+    private BigDecimal valorHora;
+    private BigDecimal qtdHora;
     private BigDecimal valorTotal;
 
     @ManyToOne

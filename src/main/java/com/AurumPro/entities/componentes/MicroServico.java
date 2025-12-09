@@ -10,8 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Entity
 @Table(name = "microServico")
 @AllArgsConstructor
@@ -20,9 +18,6 @@ import java.math.BigDecimal;
 @Setter
 public class MicroServico extends BaseComponenteEntity {
 
-    private BigDecimal valorHora;
-    private BigDecimal qtdHora;
-    private BigDecimal valorTotal;
     private String descricao;
 
     @ManyToOne(optional = false)

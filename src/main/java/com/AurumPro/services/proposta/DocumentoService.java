@@ -70,7 +70,7 @@ public class DocumentoService {
 
     public PropostaDocumentoDTO getDadosParaDocumento(Long propostaId){
         Proposta proposta = propostaRepository
-                .findById(propostaId)
+                .findByPropostaId(propostaId)
                 .orElseThrow(PropostaNotFoundException::new);
 
         Cliente cliente = clienteRepository
@@ -137,7 +137,7 @@ public class DocumentoService {
         List<Long> servicoList = itemPropostaList
                 .stream()
                 .map(item -> item.getServico().getId())
-                .toList();;
+                .toList();
 
         List<Long> microServicoList = itemPropostaList
                 .stream()
@@ -193,7 +193,7 @@ public class DocumentoService {
             for (ItemProposta item : entry.getValue()) {
                 MicroServico micro = item.getMicroServico();
                 sb.append("   - ").append(micro.getNome())
-                        .append(" (R$ ").append(micro.getValorTotal()).append(")\n");
+                        .append(" (R$ ").append(item.getValorTotal()).append(")\n");
             }
 
             sb.append("\n");
@@ -250,7 +250,6 @@ public class DocumentoService {
         }
 
         String texto = sb.toString();
-        if (texto == null) return;
 
         // Substitui todas as variáveis
         for (Map.Entry<String, String> e : variaveis.entrySet()) {

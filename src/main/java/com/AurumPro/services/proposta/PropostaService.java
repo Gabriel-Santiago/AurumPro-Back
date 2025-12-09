@@ -13,6 +13,7 @@ import com.AurumPro.entities.proposta.ItemProposta;
 import com.AurumPro.entities.proposta.Proposta;
 import com.AurumPro.enums.TipoDesconto;
 import com.AurumPro.exceptions.cliente.ClienteNotFoundException;
+import com.AurumPro.exceptions.componentes.ConvenioNotFoundEmpresaException;
 import com.AurumPro.exceptions.componentes.ConvenioNotFoundException;
 import com.AurumPro.exceptions.empresa.ColaboradorNotFoundEmpresaException;
 import com.AurumPro.exceptions.empresa.ColaboradorNotFoundException;
@@ -69,8 +70,15 @@ public class PropostaService {
         Cliente cliente = clienteRepository.findById(dto.clienteId())
                 .orElseThrow(ClienteNotFoundException::new);
 
-        Convenio convenio = convenioRepository.findById(dto.convenioId())
-                .orElseThrow(ConvenioNotFoundException::new);
+        Convenio convenio = null;
+        if (dto.convenioId() != null) {
+            convenio = convenioRepository.findById(dto.convenioId())
+                    .orElseThrow(ConvenioNotFoundException::new);
+
+            if (!convenio.getEmpresa().getId().equals(empresa.getId())) {
+                throw new ConvenioNotFoundEmpresaException();
+            }
+        }
 
         Colaborador colaborador = null;
         if (dto.colaboradorId() != null) {
@@ -152,10 +160,10 @@ public class PropostaService {
                         dto.getPropostaId(),
                         dto.getCliente().getId(),
                         dto.getCliente().getNome(),
-                        dto.getConvenio().getId(),
+                        dto.getConvenio() != null ? dto.getConvenio().getId() : null,
                         dto.getColaborador() != null ? dto.getColaborador().getId() : null,
                         dto.getEmpresa().getId(),
-                        dto.getConvenio().getNome(),
+                        dto.getConvenio() != null ? dto.getConvenio().getNome() : null,
                         dto.getCustoList().stream()
                                 .map(c -> new CustoDTO(c.getId(), c.getNome(), c.getValor()))
                                 .toList(),
@@ -164,8 +172,8 @@ public class PropostaService {
                                         i.getItemPropostaId(),
                                         i.getServico().getId(),
                                         i.getMicroServico().getId(),
-                                        i.getMicroServico().getValorHora(),
-                                        i.getMicroServico().getQtdHora(),
+                                        i.getValorHora(),
+                                        i.getQtdHora(),
                                         i.getValorTotal()
                                 ))
                                 .toList(),
@@ -187,10 +195,10 @@ public class PropostaService {
                         prop.getPropostaId(),
                         prop.getCliente().getId(),
                         prop.getCliente().getNome(),
-                        prop.getConvenio().getId(),
+                        prop.getConvenio() != null ? prop.getConvenio().getId() : null,
                         prop.getColaborador() != null ? prop.getColaborador().getId() : null,
                         prop.getEmpresa().getId(),
-                        prop.getConvenio().getNome(),
+                        prop.getConvenio() != null ? prop.getConvenio().getNome() : null,
                         prop.getCustoList().stream()
                                 .map(c -> new CustoDTO(c.getId(), c.getNome(), c.getValor()))
                                 .toList(),
@@ -199,8 +207,8 @@ public class PropostaService {
                                         i.getItemPropostaId(),
                                         i.getServico().getId(),
                                         i.getMicroServico().getId(),
-                                        i.getMicroServico().getValorHora(),
-                                        i.getMicroServico().getQtdHora(),
+                                        i.getValorHora(),
+                                        i.getQtdHora(),
                                         i.getValorTotal()
                                 ))
                                 .toList(),

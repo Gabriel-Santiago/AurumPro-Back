@@ -44,16 +44,16 @@ public class ItemPropostaService {
                 itemPropostaSalva.getItemPropostaId(),
                 itemPropostaSalva.getServico().getId(),
                 itemPropostaSalva.getMicroServico().getId(),
-                itemPropostaSalva.getMicroServico().getValorHora(),
-                itemPropostaSalva.getMicroServico().getQtdHora(),
+                itemPropostaSalva.getValorHora(),
+                itemPropostaSalva.getQtdHora(),
                 itemPropostaSalva.getValorTotal()
         );
     }
 
     private static ItemProposta getItemProposta(CreateItemPropostaDTO dto, MicroServico microServico, Servico servico) {
-        BigDecimal valorHora = dto.valorHora() != null ? dto.valorHora() : microServico.getValorHora();
-        BigDecimal quantidadeHoras = dto.quantidadeHoras() != null ? dto.quantidadeHoras() : microServico.getQtdHora();
-        BigDecimal valorTotal = dto.valorTotal() != null ? dto.valorTotal() : microServico.getValorTotal();
+        BigDecimal valorHora = dto.valorHora() != null ? dto.valorHora() : null;
+        BigDecimal quantidadeHoras = dto.qtdHora() != null ? dto.qtdHora() : null;
+        BigDecimal valorTotal = dto.valorTotal() != null ? dto.valorTotal() : null;
 
         if (valorTotal == null && valorHora != null && quantidadeHoras != null) {
             valorTotal = valorHora.multiply(quantidadeHoras);
@@ -62,6 +62,8 @@ public class ItemPropostaService {
         ItemProposta itemProposta = new ItemProposta();
         itemProposta.setServico(servico);
         itemProposta.setMicroServico(microServico);
+        itemProposta.setQtdHora(quantidadeHoras);
+        itemProposta.setValorHora(valorHora);
         itemProposta.setValorTotal(valorTotal != null ? valorTotal : BigDecimal.ZERO);
         return itemProposta;
     }

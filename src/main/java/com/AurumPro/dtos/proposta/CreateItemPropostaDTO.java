@@ -6,7 +6,7 @@ public record CreateItemPropostaDTO(
         Long servicoId,
         Long microServicoId,
         BigDecimal valorHora,
-        BigDecimal quantidadeHoras,
+        BigDecimal qtdHora,
         BigDecimal valorTotal
 ) {
 }
