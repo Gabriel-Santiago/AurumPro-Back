@@ -1,9 +1,11 @@
 package com.AurumPro.dtos.proposta;
 
 import com.AurumPro.dtos.componentes.custo.CustoDTO;
+import com.AurumPro.enums.StatusProposta;
 import com.AurumPro.enums.TipoDesconto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record PropostaDTO(
@@ -20,6 +22,10 @@ public record PropostaDTO(
         boolean desconto,
         BigDecimal valorDesconto,
         BigDecimal porcentagemDesconto,
-        BigDecimal valorTotal
+        BigDecimal valorTotal,
+        StatusProposta statusProposta,
+        LocalDateTime dataCriacao,
+        LocalDateTime dataValidade,
+        LocalDateTime dataMudancaStatus
 ) {
 }

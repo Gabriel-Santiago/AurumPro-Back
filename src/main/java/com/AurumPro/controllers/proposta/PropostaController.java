@@ -5,6 +5,7 @@ import com.AurumPro.dtos.proposta.PropostaDTO;
 import com.AurumPro.services.proposta.PropostaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,5 +43,12 @@ public class PropostaController {
                                                                    @PathVariable("clienteId") Long clienteId){
         return new ResponseEntity<>(service.findPropostaByCliente(empresaId, clienteId),
                 HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{propostaId}")
+    public ResponseEntity<Void> deleteProposta(@PathVariable("propostaId") Long propostaId) {
+        service.delete(propostaId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

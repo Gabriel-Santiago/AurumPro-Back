@@ -5,6 +5,7 @@ import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.empresa.Colaborador;
 import com.AurumPro.entities.empresa.Empresa;
+import com.AurumPro.enums.StatusProposta;
 import com.AurumPro.enums.TipoDesconto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -40,6 +41,8 @@ public class Proposta {
     private long propostaId;
 
     private LocalDateTime dataCriacao;
+    private LocalDateTime dataValidade;
+    private LocalDateTime dataMudancaStatus;
     private BigDecimal valorTotal;
     private boolean desconto;
     private BigDecimal valorDesconto;
@@ -48,6 +51,8 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private TipoDesconto tipoDesconto;
 
+    @Enumerated(EnumType.STRING)
+    private StatusProposta statusProposta;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "empresaId")

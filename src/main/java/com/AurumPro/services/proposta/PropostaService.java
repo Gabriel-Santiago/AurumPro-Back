@@ -11,6 +11,7 @@ import com.AurumPro.entities.empresa.Colaborador;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.entities.proposta.ItemProposta;
 import com.AurumPro.entities.proposta.Proposta;
+import com.AurumPro.enums.StatusProposta;
 import com.AurumPro.enums.TipoDesconto;
 import com.AurumPro.exceptions.cliente.ClienteNotFoundException;
 import com.AurumPro.exceptions.componentes.ConvenioNotFoundEmpresaException;
@@ -92,10 +93,12 @@ public class PropostaService {
 
         Proposta proposta = new Proposta();
         proposta.setDataCriacao(LocalDateTime.now());
+        proposta.setDataValidade(LocalDateTime.now().plusDays(8));
         proposta.setEmpresa(empresa);
         proposta.setCliente(cliente);
         proposta.setConvenio(convenio);
         proposta.setColaborador(colaborador);
+        proposta.setStatusProposta(StatusProposta.EM_AVALIACAO);
 
         proposta.setValorDesconto(BigDecimal.ZERO);
         proposta.setPorcentagemDesconto(BigDecimal.ZERO);
@@ -156,33 +159,8 @@ public class PropostaService {
 
         return propostaList
                 .stream()
-                .map(dto -> new PropostaDTO(
-                        dto.getPropostaId(),
-                        dto.getCliente().getId(),
-                        dto.getCliente().getNome(),
-                        dto.getConvenio() != null ? dto.getConvenio().getId() : null,
-                        dto.getColaborador() != null ? dto.getColaborador().getId() : null,
-                        dto.getEmpresa().getId(),
-                        dto.getConvenio() != null ? dto.getConvenio().getNome() : null,
-                        dto.getCustoList().stream()
-                                .map(c -> new CustoDTO(c.getId(), c.getNome(), c.getValor()))
-                                .toList(),
-                        dto.getItemPropostaList().stream()
-                                .map(i -> new ItemPropostaDTO(
-                                        i.getItemPropostaId(),
-                                        i.getServico().getId(),
-                                        i.getMicroServico().getId(),
-                                        i.getValorHora(),
-                                        i.getQtdHora(),
-                                        i.getValorTotal()
-                                ))
-                                .toList(),
-                        dto.getTipoDesconto(),
-                        dto.isDesconto(),
-                        dto.getValorDesconto(),
-                        dto.getPorcentagemDesconto(),
-                        dto.getValorTotal()
-                ))
+                .map(this::updateStatus)
+                .map(this::toDTO)
                 .toList();
     }
 
@@ -191,39 +169,65 @@ public class PropostaService {
 
         return propostaList
                 .stream()
-                .map(prop -> new PropostaDTO(
-                        prop.getPropostaId(),
-                        prop.getCliente().getId(),
-                        prop.getCliente().getNome(),
-                        prop.getConvenio() != null ? prop.getConvenio().getId() : null,
-                        prop.getColaborador() != null ? prop.getColaborador().getId() : null,
-                        prop.getEmpresa().getId(),
-                        prop.getConvenio() != null ? prop.getConvenio().getNome() : null,
-                        prop.getCustoList().stream()
-                                .map(c -> new CustoDTO(c.getId(), c.getNome(), c.getValor()))
-                                .toList(),
-                        prop.getItemPropostaList().stream()
-                                .map(i -> new ItemPropostaDTO(
-                                        i.getItemPropostaId(),
-                                        i.getServico().getId(),
-                                        i.getMicroServico().getId(),
-                                        i.getValorHora(),
-                                        i.getQtdHora(),
-                                        i.getValorTotal()
-                                ))
-                                .toList(),
-                        prop.getTipoDesconto(),
-                        prop.isDesconto(),
-                        prop.getValorDesconto(),
-                        prop.getPorcentagemDesconto(),
-                        prop.getValorTotal()
-                ))
+                .map(this::updateStatus)
+                .map(this::toDTO)
                 .toList();
     }
 
-    public Proposta findById(Long id){
-        return repository
-                .findById(id)
+    public Proposta updateStatus(Proposta proposta){
+        boolean expirou = LocalDateTime.now().isAfter(proposta.getDataValidade());
+
+        if (expirou
+                && proposta.getStatusProposta() != StatusProposta.ACEITA
+                && proposta.getStatusProposta() != StatusProposta.RECUSADA){
+            proposta.setStatusProposta(StatusProposta.EXPIRADA);
+
+            return repository.save(proposta);
+        }
+
+        return proposta;
+    }
+
+    @Transactional
+    public void delete(Long propostaId){
+        Proposta proposta = repository
+                .findByPropostaId(propostaId)
                 .orElseThrow(PropostaNotFoundException::new);
+
+        repository.delete(proposta);
+    }
+
+    private PropostaDTO toDTO(Proposta proposta) {
+        return new PropostaDTO(
+                proposta.getPropostaId(),
+                proposta.getCliente().getId(),
+                proposta.getCliente().getNome(),
+                proposta.getConvenio() != null ? proposta.getConvenio().getId() : null,
+                proposta.getColaborador() != null ? proposta.getColaborador().getId() : null,
+                proposta.getEmpresa().getId(),
+                proposta.getConvenio() != null ? proposta.getConvenio().getNome() : null,
+                proposta.getCustoList().stream()
+                        .map(c -> new CustoDTO(c.getId(), c.getNome(), c.getValor()))
+                        .toList(),
+                proposta.getItemPropostaList().stream()
+                        .map(i -> new ItemPropostaDTO(
+                                i.getItemPropostaId(),
+                                i.getServico().getId(),
+                                i.getMicroServico().getId(),
+                                i.getValorHora(),
+                                i.getQtdHora(),
+                                i.getValorTotal()
+                        ))
+                        .toList(),
+                proposta.getTipoDesconto(),
+                proposta.isDesconto(),
+                proposta.getValorDesconto(),
+                proposta.getPorcentagemDesconto(),
+                proposta.getValorTotal(),
+                proposta.getStatusProposta(),
+                proposta.getDataCriacao(),
+                proposta.getDataValidade(),
+                proposta.getDataMudancaStatus()
+        );
     }
 }
