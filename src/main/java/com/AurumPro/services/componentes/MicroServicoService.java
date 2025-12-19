@@ -5,7 +5,8 @@ import com.AurumPro.dtos.componentes.microServico.MicroServicoDTO;
 import com.AurumPro.entities.componentes.MicroServico;
 import com.AurumPro.entities.componentes.Servico;
 import com.AurumPro.entities.empresa.Empresa;
-import com.AurumPro.exceptions.componentes.MicroServicoNotFoundEmpresaException;
+import com.AurumPro.exceptions.componentes.MicroServicoNotAssociatedToEmpresaException;
+import com.AurumPro.exceptions.componentes.MicroServicoNotFoundException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.componentes.MicroServicoRepository;
 import com.AurumPro.repositories.componentes.ServicoRepository;
@@ -38,7 +39,7 @@ public class MicroServicoService {
 
         Servico servico = servicoRepository
                 .findById(dto.servicoId())
-                .orElseThrow(MicroServicoNotFoundEmpresaException::new);
+                .orElseThrow(MicroServicoNotAssociatedToEmpresaException::new);
 
         MicroServico microServico = new MicroServico();
         microServico.setNome(dto.nome());
@@ -69,6 +70,6 @@ public class MicroServicoService {
                         dto.getId(),
                         dto.getNome()
                 ))
-                .orElseThrow();
+                .orElseThrow(MicroServicoNotFoundException::new);
     }
 }

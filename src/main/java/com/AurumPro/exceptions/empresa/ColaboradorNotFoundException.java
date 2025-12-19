@@ -1,6 +1,8 @@
 package com.AurumPro.exceptions.empresa;
 
-public class ColaboradorNotFoundException extends RuntimeException{
+import com.AurumPro.exceptions.NotFoundException;
+
+public class ColaboradorNotFoundException extends NotFoundException {
 
     public ColaboradorNotFoundException(){
         super("ID do consultor não foi encontrado!");

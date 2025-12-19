@@ -9,6 +9,7 @@ import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.entities.proposta.Proposta;
 import com.AurumPro.enums.StatusProposta;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
+import com.AurumPro.exceptions.proposta.ProposalDoesNotBelongToCompanyException;
 import com.AurumPro.exceptions.proposta.PropostaNotFoundException;
 import com.AurumPro.exceptions.proposta.StatusInvalidoException;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
@@ -122,7 +123,7 @@ public class FinancaService {
                 .orElseThrow(PropostaNotFoundException::new);
 
         if (!proposta.getEmpresa().getId().equals(empresa.getId())) {
-            throw new RuntimeException("Esta proposta não pertence à sua empresa");
+            throw new ProposalDoesNotBelongToCompanyException();
         }
 
         validarTransicaoStatus(proposta.getStatusProposta(), dto.statusProposta());

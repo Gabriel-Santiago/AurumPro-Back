@@ -1,6 +1,8 @@
 package com.AurumPro.exceptions.endereco;
 
-public class CepIsEmptyException extends RuntimeException{
+import com.AurumPro.exceptions.BadRequestException;
+
+public class CepIsEmptyException extends BadRequestException {
 
     public CepIsEmptyException(){
         super("Cep não pode estar vazio!");

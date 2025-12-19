@@ -1,6 +1,8 @@
 package com.AurumPro.exceptions.utils;
 
-public class CpfNotFoundException extends RuntimeException{
+import com.AurumPro.exceptions.NotFoundException;
+
+public class CpfNotFoundException extends NotFoundException {
 
     public CpfNotFoundException(){
         super("CPF não foi encontrado!");

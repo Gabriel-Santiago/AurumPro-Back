@@ -4,6 +4,7 @@ import com.AurumPro.dtos.componentes.servico.CreateServicoDTO;
 import com.AurumPro.dtos.componentes.servico.ServicoDTO;
 import com.AurumPro.entities.componentes.Servico;
 import com.AurumPro.entities.empresa.Empresa;
+import com.AurumPro.exceptions.componentes.ServicoNotFoundException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.componentes.ServicoRepository;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
@@ -59,6 +60,6 @@ public class ServicoService {
                         dto.getId(),
                         dto.getNome()
                 ))
-                .orElseThrow();
+                .orElseThrow(ServicoNotFoundException::new);
     }
 }

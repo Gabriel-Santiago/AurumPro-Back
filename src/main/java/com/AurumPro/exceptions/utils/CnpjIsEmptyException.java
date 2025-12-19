@@ -1,6 +1,8 @@
 package com.AurumPro.exceptions.utils;
 
-public class CnpjIsEmptyException extends RuntimeException{
+import com.AurumPro.exceptions.BadRequestException;
+
+public class CnpjIsEmptyException extends BadRequestException {
 
     public CnpjIsEmptyException(){
         super("CNPJ não pode estar vazio!");

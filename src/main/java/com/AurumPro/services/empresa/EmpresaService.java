@@ -4,7 +4,6 @@ import com.AurumPro.api.DadosReceita;
 import com.AurumPro.api.Endereco;
 import com.AurumPro.api.ReceitaWS;
 import com.AurumPro.api.ViaCep;
-import com.AurumPro.dtos.componentes.convenio.CreateConvenioDTO;
 import com.AurumPro.dtos.empresa.CreateEmpresaDTO;
 import com.AurumPro.dtos.empresa.DeleteEmpresaDTO;
 import com.AurumPro.dtos.empresa.EmpresaDTO;
@@ -14,10 +13,9 @@ import com.AurumPro.dtos.empresa.UpdateEmailEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateTelefoneEmpresaDTO;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
-import com.AurumPro.exceptions.empresa.CnpjExistException;
+import com.AurumPro.exceptions.utils.CnpjExistException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
-import com.AurumPro.services.componentes.ConvenioService;
 import com.AurumPro.utils.ValidadeId;
 import com.AurumPro.utils.ValidateCep;
 import jakarta.transaction.Transactional;
@@ -28,20 +26,17 @@ import java.util.List;
 @Service
 public class EmpresaService {
 
-    private final ConvenioService convenioService;
     private final EmpresaRepository repository;
     private final ReceitaWS receitaWS;
     private final ValidateCep validateCep;
     private final ValidadeId validadeId;
     private final ViaCep viaCep;
 
-    public EmpresaService(ConvenioService convenioService,
-                          EmpresaRepository repository,
+    public EmpresaService(EmpresaRepository repository,
                           ReceitaWS receitaWS,
                           ValidateCep validateCep,
                           ValidadeId validadeId,
                           ViaCep viaCep) {
-        this.convenioService = convenioService;
         this.repository = repository;
         this.receitaWS = receitaWS;
         this.validateCep = validateCep;
@@ -104,17 +99,7 @@ public class EmpresaService {
 
         empresa.setNome(dadosReceita.nome());
 
-        Empresa empresaCriada = repository.save(empresa);
-
-        var convenio = createConvenioDTO(empresaCriada.getId());
-
-        convenioService.createConvenio(convenio);
-    }
-
-    private CreateConvenioDTO createConvenioDTO(Long id){
-        return new CreateConvenioDTO(
-                id, "Sem Convênio"
-        );
+        repository.save(empresa);
     }
 
     public List<EmpresaDTO> findAll(){

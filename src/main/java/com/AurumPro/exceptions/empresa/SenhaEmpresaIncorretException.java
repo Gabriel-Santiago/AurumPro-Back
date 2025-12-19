@@ -1,6 +1,8 @@
 package com.AurumPro.exceptions.empresa;
 
-public class SenhaEmpresaIncorretException extends RuntimeException{
+import com.AurumPro.exceptions.UnauthorizedException;
+
+public class SenhaEmpresaIncorretException extends UnauthorizedException {
 
     public SenhaEmpresaIncorretException(){
         super("A senha está incorreta!");

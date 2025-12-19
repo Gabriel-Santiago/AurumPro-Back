@@ -1,6 +1,8 @@
 package com.AurumPro.exceptions.endereco;
 
-public class CepNotFoundException extends RuntimeException{
+import com.AurumPro.exceptions.NotFoundException;
+
+public class CepNotFoundException extends NotFoundException {
 
     public CepNotFoundException(){
         super("Cep não foi encontrado!");

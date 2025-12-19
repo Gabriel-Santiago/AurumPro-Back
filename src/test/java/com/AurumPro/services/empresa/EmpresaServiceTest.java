@@ -11,7 +11,7 @@ import com.AurumPro.dtos.empresa.UpdateCepEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateEmailEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateTelefoneEmpresaDTO;
 import com.AurumPro.entities.empresa.Empresa;
-import com.AurumPro.exceptions.empresa.CnpjExistException;
+import com.AurumPro.exceptions.utils.CnpjExistException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
 import com.AurumPro.repositories.empresa.EmpresaRepository;

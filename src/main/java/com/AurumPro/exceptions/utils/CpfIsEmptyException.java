@@ -1,6 +1,8 @@
 package com.AurumPro.exceptions.utils;
 
-public class CpfIsEmptyException extends RuntimeException{
+import com.AurumPro.exceptions.BadRequestException;
+
+public class CpfIsEmptyException extends BadRequestException {
 
     public CpfIsEmptyException(){
         super("CPF não pode estar vazio!");

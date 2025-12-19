@@ -14,9 +14,9 @@ import com.AurumPro.dtos.cliente.UpdateEnderecoClienteDTO;
 import com.AurumPro.entities.cliente.Cliente;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.enums.TipoPessoa;
-import com.AurumPro.exceptions.cliente.ClienteNotFoundEmpresaException;
+import com.AurumPro.exceptions.cliente.ClienteNotAssociatedToEmpresaException;
 import com.AurumPro.exceptions.cliente.ClienteNotFoundException;
-import com.AurumPro.exceptions.cliente.PessoaJuridicaNotFoundEmpresaException;
+import com.AurumPro.exceptions.cliente.PessoaJuridicaNotAssociatedToEmpresaException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
 import com.AurumPro.repositories.cliente.ClienteRepository;
@@ -198,7 +198,7 @@ public class ClienteService {
         Empresa empresa = validadeId.validate(dto.empresaId(), empresaRepository);
 
         if (!cliente.getEmpresa().getId().equals(empresa.getId())){
-            throw new ClienteNotFoundEmpresaException();
+            throw new ClienteNotAssociatedToEmpresaException();
         }
 
         if(!empresa.getSenha().equals(dto.senha())){
@@ -256,9 +256,9 @@ public class ClienteService {
 
         if (c.getTipoPessoa() != tipoPessoa) {
             if (tipoPessoa == TipoPessoa.PF) {
-                throw new ClienteNotFoundEmpresaException();
+                throw new ClienteNotAssociatedToEmpresaException();
             } else {
-                throw new PessoaJuridicaNotFoundEmpresaException();
+                throw new PessoaJuridicaNotAssociatedToEmpresaException();
             }
         }
 

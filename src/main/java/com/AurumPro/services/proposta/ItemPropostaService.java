@@ -5,6 +5,8 @@ import com.AurumPro.dtos.proposta.ItemPropostaDTO;
 import com.AurumPro.entities.componentes.MicroServico;
 import com.AurumPro.entities.componentes.Servico;
 import com.AurumPro.entities.proposta.ItemProposta;
+import com.AurumPro.exceptions.componentes.MicroServicoNotFoundException;
+import com.AurumPro.exceptions.componentes.ServicoNotFoundException;
 import com.AurumPro.repositories.componentes.MicroServicoRepository;
 import com.AurumPro.repositories.componentes.ServicoRepository;
 import com.AurumPro.repositories.proposta.ItemPropostaRepository;
@@ -31,10 +33,10 @@ public class ItemPropostaService {
     @Transactional
     public ItemPropostaDTO createItemProposta(CreateItemPropostaDTO dto) {
         Servico servico = servicoRepository.findById(dto.servicoId())
-                .orElseThrow();
+                .orElseThrow(ServicoNotFoundException::new);
 
         MicroServico microServico = microServicoRepository.findById(dto.microServicoId())
-                .orElseThrow();
+                .orElseThrow(MicroServicoNotFoundException::new);
 
         ItemProposta itemProposta = getItemProposta(dto, microServico, servico);
 

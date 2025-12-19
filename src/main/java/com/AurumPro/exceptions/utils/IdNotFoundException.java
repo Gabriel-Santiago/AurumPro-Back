@@ -1,6 +1,8 @@
 package com.AurumPro.exceptions.utils;
 
-public class IdNotFoundException extends RuntimeException{
+import com.AurumPro.exceptions.NotFoundException;
+
+public class IdNotFoundException extends NotFoundException {
 
     public IdNotFoundException(){
         super("ID não foi encontrado!");

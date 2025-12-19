@@ -14,9 +14,9 @@ import com.AurumPro.entities.proposta.Proposta;
 import com.AurumPro.enums.StatusProposta;
 import com.AurumPro.enums.TipoDesconto;
 import com.AurumPro.exceptions.cliente.ClienteNotFoundException;
-import com.AurumPro.exceptions.componentes.ConvenioNotFoundEmpresaException;
+import com.AurumPro.exceptions.componentes.ConvenioNotAssociatedToEmpresaException;
 import com.AurumPro.exceptions.componentes.ConvenioNotFoundException;
-import com.AurumPro.exceptions.empresa.ColaboradorNotFoundEmpresaException;
+import com.AurumPro.exceptions.empresa.ColaboradorNotAssociatedToEmpresaException;
 import com.AurumPro.exceptions.empresa.ColaboradorNotFoundException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.exceptions.proposta.PropostaNotFoundException;
@@ -77,7 +77,7 @@ public class PropostaService {
                     .orElseThrow(ConvenioNotFoundException::new);
 
             if (!convenio.getEmpresa().getId().equals(empresa.getId())) {
-                throw new ConvenioNotFoundEmpresaException();
+                throw new ConvenioNotAssociatedToEmpresaException();
             }
         }
 
@@ -87,7 +87,7 @@ public class PropostaService {
                     .orElseThrow(ColaboradorNotFoundException::new);
 
             if (!colaborador.getEmpresa().getId().equals(empresa.getId())){
-                throw new ColaboradorNotFoundEmpresaException();
+                throw new ColaboradorNotAssociatedToEmpresaException();
             }
         }
 
