@@ -13,11 +13,11 @@ import com.AurumPro.dtos.empresa.UpdateEmailEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateTelefoneEmpresaDTO;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
-import com.AurumPro.exceptions.utils.CnpjExistException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
 import com.AurumPro.utils.ValidadeId;
 import com.AurumPro.utils.ValidateCep;
+import com.AurumPro.utils.ValidateEmpresaCnpjExist;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +29,20 @@ public class EmpresaService {
     private final EmpresaRepository repository;
     private final ReceitaWS receitaWS;
     private final ValidateCep validateCep;
+    private final ValidateEmpresaCnpjExist validateEmpresaCnpjExist;
     private final ValidadeId validadeId;
     private final ViaCep viaCep;
 
     public EmpresaService(EmpresaRepository repository,
                           ReceitaWS receitaWS,
                           ValidateCep validateCep,
+                          ValidateEmpresaCnpjExist validateEmpresaCnpjExist,
                           ValidadeId validadeId,
                           ViaCep viaCep) {
         this.repository = repository;
         this.receitaWS = receitaWS;
         this.validateCep = validateCep;
+        this.validateEmpresaCnpjExist = validateEmpresaCnpjExist;
         this.validadeId = validadeId;
         this.viaCep = viaCep;
     }
@@ -71,9 +74,7 @@ public class EmpresaService {
 
     @Transactional
     public void createEmpresa(CreateEmpresaDTO dto) throws Exception {
-        if(repository.existsByCnpj(dto.cnpj())){
-            throw new CnpjExistException();
-        }
+        validateEmpresaCnpjExist.validate(dto.cnpj());
 
         DadosReceita dadosReceita = receitaWS
                 .consultaCnpj(dto.cnpj());

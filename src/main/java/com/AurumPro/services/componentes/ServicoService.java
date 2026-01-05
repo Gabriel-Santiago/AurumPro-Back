@@ -8,6 +8,7 @@ import com.AurumPro.exceptions.componentes.ServicoNotFoundException;
 import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.componentes.ServicoRepository;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
+import com.AurumPro.utils.ValidateNomeServicoExist;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,14 @@ public class ServicoService {
 
     private final EmpresaRepository empresaRepository;
     private final ServicoRepository repository;
+    private final ValidateNomeServicoExist validateNomeServicoExist;
 
     public ServicoService(EmpresaRepository empresaRepository,
-                          ServicoRepository repository) {
+                          ServicoRepository repository,
+                          ValidateNomeServicoExist validateNomeServicoExist) {
         this.empresaRepository = empresaRepository;
         this.repository = repository;
+        this.validateNomeServicoExist = validateNomeServicoExist;
     }
 
     @Transactional
@@ -30,6 +34,8 @@ public class ServicoService {
         Empresa empresa = empresaRepository
                 .findById(dto.id())
                 .orElseThrow(EmpresaNotFoundException::new);
+
+        validateNomeServicoExist.validate(dto.nome(), dto.id());
 
         Servico servico = new Servico();
         servico.setNome(dto.nome());

@@ -21,11 +21,7 @@ import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
 import com.AurumPro.repositories.cliente.ClienteRepository;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
-import com.AurumPro.utils.CalculateAge;
-import com.AurumPro.utils.ValidateCep;
-import com.AurumPro.utils.ValidateCpf;
-import com.AurumPro.utils.ValidateCnpj;
-import com.AurumPro.utils.ValidadeId;
+import com.AurumPro.utils.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +37,7 @@ public class ClienteService {
     private final ValidateCep validateCep;
     private final ValidateCpf validateCpf;
     private final ValidateCnpj validateCnpj;
+    private final ValidateClienteCnpjExist validateClienteCnpjExist;
     private final ValidadeId validadeId;
     private final ViaCep viaCep;
 
@@ -51,7 +48,9 @@ public class ClienteService {
                           ValidateCep validateCep,
                           ValidateCpf validateCpf,
                           ValidateCnpj validateCnpj,
-                          ValidadeId validadeId, ViaCep viaCep) {
+                          ValidateClienteCnpjExist validateClienteCnpjExist,
+                          ValidadeId validadeId,
+                          ViaCep viaCep) {
         this.calculateAge = calculateAge;
         this.repository = repository;
         this.empresaRepository = empresaRepository;
@@ -59,6 +58,7 @@ public class ClienteService {
         this.validateCep = validateCep;
         this.validateCpf = validateCpf;
         this.validateCnpj = validateCnpj;
+        this.validateClienteCnpjExist = validateClienteCnpjExist;
         this.validadeId = validadeId;
         this.viaCep = viaCep;
     }
@@ -104,6 +104,7 @@ public class ClienteService {
                 .orElseThrow(EmpresaNotFoundException::new);
 
         validateCnpj.validate(dto.cnpj());
+        validateClienteCnpjExist.validate(dto.cnpj());
 
         DadosReceita dadosReceita = receitaWS.consultaCnpj(dto.cnpj());
 

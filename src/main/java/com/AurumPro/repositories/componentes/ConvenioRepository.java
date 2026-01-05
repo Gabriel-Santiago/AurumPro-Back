@@ -10,4 +10,6 @@ import java.util.List;
 public interface ConvenioRepository extends JpaRepository<Convenio, Long> {
 
     List<Convenio> findByEmpresaId(Long empresaId);
+
+    boolean existsByNomeAndEmpresaId(String nome, Long empresaId);
 }

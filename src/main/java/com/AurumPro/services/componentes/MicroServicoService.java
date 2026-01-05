@@ -11,6 +11,7 @@ import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.componentes.MicroServicoRepository;
 import com.AurumPro.repositories.componentes.ServicoRepository;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
+import com.AurumPro.utils.ValidateNomeMicroServicoExist;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +23,16 @@ public class MicroServicoService {
     private final EmpresaRepository empresaRepository;
     private final MicroServicoRepository repository;
     private final ServicoRepository servicoRepository;
+    private final ValidateNomeMicroServicoExist  validateNomeMicroServicoExist;
 
     public MicroServicoService(EmpresaRepository empresaRepository,
                                MicroServicoRepository repository,
-                               ServicoRepository servicoRepository) {
+                               ServicoRepository servicoRepository,
+                               ValidateNomeMicroServicoExist validateNomeMicroServicoExist) {
         this.empresaRepository = empresaRepository;
         this.repository = repository;
         this.servicoRepository = servicoRepository;
+        this.validateNomeMicroServicoExist = validateNomeMicroServicoExist;
     }
 
     @Transactional
@@ -40,6 +44,8 @@ public class MicroServicoService {
         Servico servico = servicoRepository
                 .findById(dto.servicoId())
                 .orElseThrow(MicroServicoNotAssociatedToEmpresaException::new);
+
+        validateNomeMicroServicoExist.validate(dto.nome(), dto.id(), dto.servicoId());
 
         MicroServico microServico = new MicroServico();
         microServico.setNome(dto.nome());

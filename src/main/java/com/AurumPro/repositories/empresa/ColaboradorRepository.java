@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ColaboradorRepository extends JpaRepository<Colaborador, Long> {
 
+    boolean existsByNomeAndEmpresaId(String nome, Long empresaId);
 }

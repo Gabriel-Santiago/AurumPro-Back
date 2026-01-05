@@ -10,4 +10,6 @@ import java.util.List;
 public interface MicroServicoRepository extends JpaRepository<MicroServico, Long> {
 
     List<MicroServico> findByServicoId(Long servicoId);
+
+    boolean existsByNomeAndEmpresaIdAndServicoId(String nome, Long empresaId, Long servicoId);
 }

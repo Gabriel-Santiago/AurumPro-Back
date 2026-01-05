@@ -25,4 +25,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
                                          @Param("estado") String estado,
                                          @Param("tipoPessoa")TipoPessoa tipoPessoa);
 
+    Boolean existsByCnpj(String cnpj);
+
 }
