@@ -2,9 +2,11 @@ package com.AurumPro.controllers.componentes;
 
 import com.AurumPro.dtos.componentes.microServico.CreateMicroServicoDTO;
 import com.AurumPro.dtos.componentes.microServico.MicroServicoDTO;
+import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.services.componentes.MicroServicoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +27,9 @@ public class MicroServicoController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createMicroServico(@RequestBody CreateMicroServicoDTO dto){
-        service.createMicroServico(dto);
+    public ResponseEntity<Void> createMicroServico(@RequestBody CreateMicroServicoDTO dto,
+                                                   @AuthenticationPrincipal Empresa empresa){
+        service.createMicroServico(dto, empresa);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

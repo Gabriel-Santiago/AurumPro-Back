@@ -27,4 +27,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 
     Boolean existsByCnpj(String cnpj);
 
+    List<Cliente> findByEmpresaId(Long empresaId);
 }

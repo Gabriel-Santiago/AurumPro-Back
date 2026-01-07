@@ -4,9 +4,7 @@ import com.AurumPro.dtos.empresa.ColaboradorDTO;
 import com.AurumPro.dtos.empresa.CreateColaboradorDTO;
 import com.AurumPro.entities.empresa.Colaborador;
 import com.AurumPro.entities.empresa.Empresa;
-import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.empresa.ColaboradorRepository;
-import com.AurumPro.repositories.empresa.EmpresaRepository;
 import com.AurumPro.utils.ValidateNomeColaboradorExist;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -17,24 +15,17 @@ import java.util.List;
 public class ColaboradorService {
 
     private final ColaboradorRepository repository;
-    private final EmpresaRepository empresaRepository;
     private final ValidateNomeColaboradorExist validateNomeColaboradorExist;
 
     public ColaboradorService(ColaboradorRepository repository,
-                              EmpresaRepository empresaRepository,
                               ValidateNomeColaboradorExist validateNomeColaboradorExist) {
         this.repository = repository;
-        this.empresaRepository = empresaRepository;
         this.validateNomeColaboradorExist = validateNomeColaboradorExist;
     }
 
     @Transactional
-    public void createColaborador(CreateColaboradorDTO dto){
-        Empresa empresa = empresaRepository
-                .findById(dto.empresaId())
-                .orElseThrow(EmpresaNotFoundException::new);
-
-        validateNomeColaboradorExist.validate(dto.nome(), dto.empresaId());
+    public void createColaborador(CreateColaboradorDTO dto, Empresa empresa){
+        validateNomeColaboradorExist.validate(dto.nome(), empresa.getId());
 
         Colaborador colaborador = new Colaborador();
         colaborador.setNome(dto.nome());
@@ -47,12 +38,8 @@ public class ColaboradorService {
     }
 
     public List<ColaboradorDTO> findAllColaborador(Long empresaId){
-        empresaRepository
-                .findById(empresaId)
-                .orElseThrow(EmpresaNotFoundException::new);
-
         return repository
-                .findAll()
+                .findByEmpresaId(empresaId)
                 .stream()
                 .map(dto -> new ColaboradorDTO(
                         dto.getId(),

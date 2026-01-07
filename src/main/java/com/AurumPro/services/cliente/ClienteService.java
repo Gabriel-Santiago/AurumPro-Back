@@ -17,10 +17,8 @@ import com.AurumPro.enums.TipoPessoa;
 import com.AurumPro.exceptions.cliente.ClienteNotAssociatedToEmpresaException;
 import com.AurumPro.exceptions.cliente.ClienteNotFoundException;
 import com.AurumPro.exceptions.cliente.PessoaJuridicaNotAssociatedToEmpresaException;
-import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.exceptions.empresa.SenhaEmpresaIncorretException;
 import com.AurumPro.repositories.cliente.ClienteRepository;
-import com.AurumPro.repositories.empresa.EmpresaRepository;
 import com.AurumPro.utils.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,6 @@ public class ClienteService {
 
     private final CalculateAge calculateAge;
     private final ClienteRepository repository;
-    private final EmpresaRepository empresaRepository;
     private final ReceitaWS receitaWS;
     private final ValidateCep validateCep;
     private final ValidateCpf validateCpf;
@@ -43,7 +40,6 @@ public class ClienteService {
 
     public ClienteService(CalculateAge calculateAge,
                           ClienteRepository repository,
-                          EmpresaRepository empresaRepository,
                           ReceitaWS receitaWS,
                           ValidateCep validateCep,
                           ValidateCpf validateCpf,
@@ -53,7 +49,6 @@ public class ClienteService {
                           ViaCep viaCep) {
         this.calculateAge = calculateAge;
         this.repository = repository;
-        this.empresaRepository = empresaRepository;
         this.receitaWS = receitaWS;
         this.validateCep = validateCep;
         this.validateCpf = validateCpf;
@@ -64,11 +59,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public void createPessoaFisica(CreatePessoaFisicaDTO dto) throws Exception {
-        Empresa empresa = empresaRepository
-                .findById(dto.id())
-                .orElseThrow(EmpresaNotFoundException::new);
-
+    public void createPessoaFisica(CreatePessoaFisicaDTO dto, Empresa empresa) throws Exception {
         validateCep.validate(dto.cep());
         validateCpf.validate(dto.cpf());
 
@@ -98,10 +89,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public void createPessoaJuridica(CreatePessoaJuridicaDTO dto) throws Exception {
-        Empresa empresa = empresaRepository
-                .findById(dto.id())
-                .orElseThrow(EmpresaNotFoundException::new);
+    public void createPessoaJuridica(CreatePessoaJuridicaDTO dto, Empresa empresa) throws Exception {
 
         validateCnpj.validate(dto.cnpj());
         validateClienteCnpjExist.validate(dto.cnpj());
@@ -116,12 +104,8 @@ public class ClienteService {
     }
 
     public List<ClienteDTO> findAllCliente(Long empresaId){
-        empresaRepository
-                .findById(empresaId)
-                .orElseThrow(EmpresaNotFoundException::new);
-
         return repository
-                .findAll()
+                .findByEmpresaId(empresaId)
                 .stream()
                 .map(dto -> new ClienteDTO(
                         dto.getId(),
@@ -142,11 +126,7 @@ public class ClienteService {
                 .toList();
     }
 
-    public List<ClienteDTO> findClienteByTipoPessoaAndUf(FindTipoPessoabyUfDTO dto){
-        Empresa empresa = empresaRepository
-                .findById(dto.id())
-                .orElseThrow(EmpresaNotFoundException::new);
-
+    public List<ClienteDTO> findClienteByTipoPessoaAndUf(FindTipoPessoabyUfDTO dto, Empresa empresa){
         List<Cliente> clienteList = repository.findTipoPessoaByEstado(empresa, dto.uf(), dto.tipoPessoa());
 
         return clienteList
@@ -194,9 +174,8 @@ public class ClienteService {
     }
 
     @Transactional
-    public void deletePessoa(DeleteClienteDTO dto){
+    public void deletePessoa(DeleteClienteDTO dto, Empresa empresa){
         Cliente cliente = validarTipoPessoa(dto.id(), dto.tipoPessoa());
-        Empresa empresa = validadeId.validate(dto.empresaId(), empresaRepository);
 
         if (!cliente.getEmpresa().getId().equals(empresa.getId())){
             throw new ClienteNotAssociatedToEmpresaException();

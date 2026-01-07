@@ -8,11 +8,9 @@ import com.AurumPro.dtos.proposta.UpdateStatusPropostaDTO;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.entities.proposta.Proposta;
 import com.AurumPro.enums.StatusProposta;
-import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.exceptions.proposta.ProposalDoesNotBelongToCompanyException;
 import com.AurumPro.exceptions.proposta.PropostaNotFoundException;
 import com.AurumPro.exceptions.proposta.StatusInvalidoException;
-import com.AurumPro.repositories.empresa.EmpresaRepository;
 import com.AurumPro.repositories.proposta.PropostaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,14 +25,11 @@ import java.util.Map;
 public class FinancaService {
 
     private final PropostaRepository propostaRepository;
-    private final EmpresaRepository empresaRepository;
     private final PropostaService propostaService;
 
     public FinancaService(PropostaRepository propostaRepository,
-                          EmpresaRepository empresaRepository,
                           PropostaService propostaService) {
         this.propostaRepository = propostaRepository;
-        this.empresaRepository = empresaRepository;
         this.propostaService = propostaService;
     }
 
@@ -113,11 +108,7 @@ public class FinancaService {
         );
     }
 
-    public PropostaDTO updateStatusProposta(UpdateStatusPropostaDTO dto){
-        Empresa empresa = empresaRepository
-                .findById(dto.empresaId())
-                .orElseThrow(EmpresaNotFoundException::new);
-
+    public PropostaDTO updateStatusProposta(UpdateStatusPropostaDTO dto, Empresa empresa){
         Proposta proposta = propostaRepository
                 .findByPropostaId(dto.propostaId())
                 .orElseThrow(PropostaNotFoundException::new);

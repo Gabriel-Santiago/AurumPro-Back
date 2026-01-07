@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public record CreatePropostaDTO(
-        Long empresaId,
         Long clienteId,
         Long convenioId,
         Long colaboradorId,

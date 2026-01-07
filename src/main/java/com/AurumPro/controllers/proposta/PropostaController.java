@@ -2,9 +2,11 @@ package com.AurumPro.controllers.proposta;
 
 import com.AurumPro.dtos.proposta.CreatePropostaDTO;
 import com.AurumPro.dtos.proposta.PropostaDTO;
+import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.services.proposta.PropostaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,22 +28,23 @@ public class PropostaController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createProposta(@RequestBody CreatePropostaDTO dto){
-        service.createProposta(dto);
+    public ResponseEntity<Void> createProposta(@RequestBody CreatePropostaDTO dto,
+                                               @AuthenticationPrincipal Empresa empresa){
+        service.createProposta(dto, empresa);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{empresaId}")
-    public ResponseEntity<List<PropostaDTO>> findAllProposta(@PathVariable("empresaId") Long empresaId){
-        return new ResponseEntity<>(service.findAll(empresaId),
+    @GetMapping
+    public ResponseEntity<List<PropostaDTO>> findAllProposta(@AuthenticationPrincipal Empresa empresa){
+        return new ResponseEntity<>(service.findAll(empresa.getId()),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{empresaId}/{clienteId}")
-    public ResponseEntity<List<PropostaDTO>> findPropostaByCliente(@PathVariable("empresaId") Long empresaId,
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<List<PropostaDTO>> findPropostaByCliente(@AuthenticationPrincipal Empresa empresa,
                                                                    @PathVariable("clienteId") Long clienteId){
-        return new ResponseEntity<>(service.findPropostaByCliente(empresaId, clienteId),
+        return new ResponseEntity<>(service.findPropostaByCliente(empresa.getId(), clienteId),
                 HttpStatus.OK);
     }
 

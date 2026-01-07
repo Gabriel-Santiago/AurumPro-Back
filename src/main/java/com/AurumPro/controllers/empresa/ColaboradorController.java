@@ -2,11 +2,12 @@ package com.AurumPro.controllers.empresa;
 
 import com.AurumPro.dtos.empresa.ColaboradorDTO;
 import com.AurumPro.dtos.empresa.CreateColaboradorDTO;
+import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.services.empresa.ColaboradorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,15 +26,16 @@ public class ColaboradorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createColaborador(@RequestBody CreateColaboradorDTO dto) throws Exception {
-        service.createColaborador(dto);
+    public ResponseEntity<Void> createColaborador(@RequestBody CreateColaboradorDTO dto,
+                                                  @AuthenticationPrincipal Empresa empresa) {
+        service.createColaborador(dto, empresa);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{empresaId}")
-    public ResponseEntity<List<ColaboradorDTO>> findAllColaborador(@PathVariable("empresaId") Long empresaId) {
-        return new ResponseEntity<>(service.findAllColaborador(empresaId),
+    @GetMapping
+    public ResponseEntity<List<ColaboradorDTO>> findAllColaborador(@AuthenticationPrincipal Empresa empresa){
+        return new ResponseEntity<>(service.findAllColaborador(empresa.getId()),
                 HttpStatus.OK);
     }
 

@@ -3,7 +3,6 @@ package com.AurumPro.dtos.cliente;
 import java.time.LocalDate;
 
 public record CreatePessoaFisicaDTO(
-        Long id,
         String nome,
         String email,
         String telefone,

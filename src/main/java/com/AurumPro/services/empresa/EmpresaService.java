@@ -7,7 +7,6 @@ import com.AurumPro.api.ViaCep;
 import com.AurumPro.dtos.empresa.CreateEmpresaDTO;
 import com.AurumPro.dtos.empresa.DeleteEmpresaDTO;
 import com.AurumPro.dtos.empresa.EmpresaDTO;
-import com.AurumPro.dtos.empresa.LoginEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateCepEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateEmailEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateTelefoneEmpresaDTO;
@@ -17,18 +16,23 @@ import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.empresa.EmpresaRepository;
 import com.AurumPro.utils.ValidadeId;
 import com.AurumPro.utils.ValidateCep;
+import com.AurumPro.utils.ValidateCnpj;
 import com.AurumPro.utils.ValidateEmpresaCnpjExist;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class EmpresaService {
+public class EmpresaService implements UserDetailsService {
 
     private final EmpresaRepository repository;
     private final ReceitaWS receitaWS;
     private final ValidateCep validateCep;
+    private final ValidateCnpj validateCnpj;
     private final ValidateEmpresaCnpjExist validateEmpresaCnpjExist;
     private final ValidadeId validadeId;
     private final ViaCep viaCep;
@@ -36,44 +40,22 @@ public class EmpresaService {
     public EmpresaService(EmpresaRepository repository,
                           ReceitaWS receitaWS,
                           ValidateCep validateCep,
+                          ValidateCnpj validateCnpj,
                           ValidateEmpresaCnpjExist validateEmpresaCnpjExist,
                           ValidadeId validadeId,
                           ViaCep viaCep) {
         this.repository = repository;
         this.receitaWS = receitaWS;
         this.validateCep = validateCep;
+        this.validateCnpj = validateCnpj;
         this.validateEmpresaCnpjExist = validateEmpresaCnpjExist;
         this.validadeId = validadeId;
         this.viaCep = viaCep;
     }
 
-    public EmpresaDTO login(LoginEmpresaDTO dto){
-        Empresa empresa = repository.findByEmailAndSenha(dto.email(), dto.senha())
-                .orElseThrow(EmpresaNotFoundException::new);
-
-        if (!empresa.getSenha().equals(dto.senha())){
-            throw new SenhaEmpresaIncorretException();
-        }
-
-        return new EmpresaDTO(
-                empresa.getId(),
-                empresa.getEmail(),
-                empresa.getNome(),
-                empresa.getCnpj(),
-                empresa.getInscricaoMunicipal(),
-                empresa.getResponsavel(),
-                empresa.getTelefone(),
-                empresa.getCep(),
-                empresa.getRua(),
-                empresa.getBairro(),
-                empresa.getCidade(),
-                empresa.getEstado(),
-                empresa.getNumero()
-        );
-    }
-
     @Transactional
     public void createEmpresa(CreateEmpresaDTO dto) throws Exception {
+        validateCnpj.validate(dto.cnpj());
         validateEmpresaCnpjExist.validate(dto.cnpj());
 
         DadosReceita dadosReceita = receitaWS
@@ -184,5 +166,12 @@ public class EmpresaService {
         }
 
         repository.delete(empresa);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return repository.findByEmail(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("Empresa não encontrada"));
     }
 }

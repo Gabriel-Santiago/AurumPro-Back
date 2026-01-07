@@ -4,28 +4,19 @@ import com.AurumPro.dtos.componentes.custo.CreateCustoDTO;
 import com.AurumPro.dtos.componentes.custo.CustoDTO;
 import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.empresa.Empresa;
-import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.componentes.CustoRepository;
-import com.AurumPro.repositories.empresa.EmpresaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustoService{
 
     private final CustoRepository repository;
-    private final EmpresaRepository empresaRepository;
 
-    public CustoService(CustoRepository repository,
-                        EmpresaRepository empresaRepository) {
+    public CustoService(CustoRepository repository) {
         this.repository = repository;
-        this.empresaRepository = empresaRepository;
     }
 
-    public CustoDTO createCusto(CreateCustoDTO dto){
-        Empresa empresa = empresaRepository
-                .findById(dto.empresaId())
-                .orElseThrow(EmpresaNotFoundException::new);
-
+    public CustoDTO createCusto(CreateCustoDTO dto, Empresa empresa){
         Custo custo = new Custo();
         custo.setNome(dto.nome());
         custo.setValor(dto.valor());

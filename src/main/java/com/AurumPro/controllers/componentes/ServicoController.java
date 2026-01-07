@@ -2,9 +2,11 @@ package com.AurumPro.controllers.componentes;
 
 import com.AurumPro.dtos.componentes.servico.CreateServicoDTO;
 import com.AurumPro.dtos.componentes.servico.ServicoDTO;
+import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.services.componentes.ServicoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,15 +27,16 @@ public class ServicoController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createServico(@RequestBody CreateServicoDTO dto){
-        service.createServico(dto);
+    public ResponseEntity<Void> createServico(@RequestBody CreateServicoDTO dto,
+                                              @AuthenticationPrincipal Empresa empresa){
+        service.createServico(dto, empresa);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{empresaId}")
-    public ResponseEntity<List<ServicoDTO>> findAllServico(@PathVariable("empresaId") Long empresaId){
-        return new ResponseEntity<>(service.findAll(empresaId),
+    @GetMapping
+    public ResponseEntity<List<ServicoDTO>> findAllServico(@AuthenticationPrincipal Empresa empresa){
+        return new ResponseEntity<>(service.findAll(empresa.getId()),
                 HttpStatus.OK);
     }
 

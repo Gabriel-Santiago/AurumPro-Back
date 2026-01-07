@@ -7,9 +7,11 @@ import com.AurumPro.dtos.cliente.DeleteClienteDTO;
 import com.AurumPro.dtos.cliente.FindTipoPessoabyUfDTO;
 import com.AurumPro.dtos.cliente.UpdateEmailAndTelefoneClienteDTO;
 import com.AurumPro.dtos.cliente.UpdateEnderecoClienteDTO;
+import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.services.cliente.ClienteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,22 +34,24 @@ public class ClienteController {
     }
 
     @PostMapping("/pessoaFisica")
-    public ResponseEntity<Void> createPessoaFisica(@RequestBody CreatePessoaFisicaDTO dto) throws Exception {
-        service.createPessoaFisica(dto);
+    public ResponseEntity<Void> createPessoaFisica(@RequestBody CreatePessoaFisicaDTO dto,
+                                                   @AuthenticationPrincipal Empresa empresa) throws Exception {
+        service.createPessoaFisica(dto, empresa);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/pessoaJuridica")
-    public ResponseEntity<Void> createPessoaJuridica(@RequestBody CreatePessoaJuridicaDTO dto) throws Exception {
-        service.createPessoaJuridica(dto);
+    public ResponseEntity<Void> createPessoaJuridica(@RequestBody CreatePessoaJuridicaDTO dto,
+                                                     @AuthenticationPrincipal Empresa empresa) throws Exception {
+        service.createPessoaJuridica(dto, empresa);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{empresaId}")
-    public ResponseEntity<List<ClienteDTO>> findAllCliente(@PathVariable("empresaId") Long empresaId) {
-        return new ResponseEntity<>(service.findAllCliente(empresaId),
+    @GetMapping
+    public ResponseEntity<List<ClienteDTO>> findAllCliente(@AuthenticationPrincipal Empresa empresa) {
+        return new ResponseEntity<>(service.findAllCliente(empresa.getId()),
                 HttpStatus.OK);
     }
 
@@ -58,8 +62,9 @@ public class ClienteController {
     }
 
     @GetMapping("/estados")
-    public ResponseEntity<List<ClienteDTO>> findClienteByTipoPessoaAndUf(@RequestBody FindTipoPessoabyUfDTO dto) {
-        return new ResponseEntity<>(service.findClienteByTipoPessoaAndUf(dto),
+    public ResponseEntity<List<ClienteDTO>> findClienteByTipoPessoaAndUf(@RequestBody FindTipoPessoabyUfDTO dto,
+                                                                         @AuthenticationPrincipal Empresa empresa) {
+        return new ResponseEntity<>(service.findClienteByTipoPessoaAndUf(dto, empresa),
                 HttpStatus.OK);
     }
 
@@ -78,8 +83,9 @@ public class ClienteController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteCliente(@RequestBody DeleteClienteDTO dto) {
-        service.deletePessoa(dto);
+    public ResponseEntity<Void> deleteCliente(@RequestBody DeleteClienteDTO dto,
+                                              @AuthenticationPrincipal Empresa empresa) {
+        service.deletePessoa(dto, empresa);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

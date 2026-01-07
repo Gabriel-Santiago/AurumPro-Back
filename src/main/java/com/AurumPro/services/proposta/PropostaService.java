@@ -18,13 +18,11 @@ import com.AurumPro.exceptions.componentes.ConvenioNotAssociatedToEmpresaExcepti
 import com.AurumPro.exceptions.componentes.ConvenioNotFoundException;
 import com.AurumPro.exceptions.empresa.ColaboradorNotAssociatedToEmpresaException;
 import com.AurumPro.exceptions.empresa.ColaboradorNotFoundException;
-import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.exceptions.proposta.PropostaNotFoundException;
 import com.AurumPro.repositories.cliente.ClienteRepository;
 import com.AurumPro.repositories.componentes.ConvenioRepository;
 import com.AurumPro.repositories.componentes.CustoRepository;
 import com.AurumPro.repositories.empresa.ColaboradorRepository;
-import com.AurumPro.repositories.empresa.EmpresaRepository;
 import com.AurumPro.repositories.proposta.ItemPropostaRepository;
 import com.AurumPro.repositories.proposta.PropostaRepository;
 import jakarta.transaction.Transactional;
@@ -42,7 +40,6 @@ public class PropostaService {
     private final ConvenioRepository convenioRepository;
     private final CustoRepository custoRepository;
     private final ClienteRepository clienteRepository;
-    private final EmpresaRepository empresaRepository;
     private final ItemPropostaRepository itemPropostaRepository;
     private final PropostaRepository repository;
 
@@ -50,24 +47,18 @@ public class PropostaService {
                            ConvenioRepository convenioRepository,
                            CustoRepository custoRepository,
                            ClienteRepository clienteRepository,
-                           EmpresaRepository empresaRepository,
                            ItemPropostaRepository itemPropostaRepository,
                            PropostaRepository repository) {
         this.colaboradorRepository = colaboradorRepository;
         this.convenioRepository = convenioRepository;
         this.custoRepository = custoRepository;
         this.clienteRepository = clienteRepository;
-        this.empresaRepository = empresaRepository;
         this.itemPropostaRepository = itemPropostaRepository;
         this.repository = repository;
     }
 
     @Transactional
-    public void createProposta(CreatePropostaDTO dto) {
-
-        Empresa empresa = empresaRepository.findById(dto.empresaId())
-                .orElseThrow(EmpresaNotFoundException::new);
-
+    public void createProposta(CreatePropostaDTO dto, Empresa empresa) {
         Cliente cliente = clienteRepository.findById(dto.clienteId())
                 .orElseThrow(ClienteNotFoundException::new);
 

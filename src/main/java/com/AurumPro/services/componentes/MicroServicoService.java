@@ -7,10 +7,8 @@ import com.AurumPro.entities.componentes.Servico;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.exceptions.componentes.MicroServicoNotAssociatedToEmpresaException;
 import com.AurumPro.exceptions.componentes.MicroServicoNotFoundException;
-import com.AurumPro.exceptions.empresa.EmpresaNotFoundException;
 import com.AurumPro.repositories.componentes.MicroServicoRepository;
 import com.AurumPro.repositories.componentes.ServicoRepository;
-import com.AurumPro.repositories.empresa.EmpresaRepository;
 import com.AurumPro.utils.ValidateNomeMicroServicoExist;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -20,32 +18,25 @@ import java.util.List;
 @Service
 public class MicroServicoService {
 
-    private final EmpresaRepository empresaRepository;
     private final MicroServicoRepository repository;
     private final ServicoRepository servicoRepository;
     private final ValidateNomeMicroServicoExist  validateNomeMicroServicoExist;
 
-    public MicroServicoService(EmpresaRepository empresaRepository,
-                               MicroServicoRepository repository,
+    public MicroServicoService(MicroServicoRepository repository,
                                ServicoRepository servicoRepository,
                                ValidateNomeMicroServicoExist validateNomeMicroServicoExist) {
-        this.empresaRepository = empresaRepository;
         this.repository = repository;
         this.servicoRepository = servicoRepository;
         this.validateNomeMicroServicoExist = validateNomeMicroServicoExist;
     }
 
     @Transactional
-    public void createMicroServico(CreateMicroServicoDTO dto){
-        Empresa empresa = empresaRepository
-                .findById(dto.id())
-                .orElseThrow(EmpresaNotFoundException::new);
-
+    public void createMicroServico(CreateMicroServicoDTO dto, Empresa empresa){
         Servico servico = servicoRepository
                 .findById(dto.servicoId())
                 .orElseThrow(MicroServicoNotAssociatedToEmpresaException::new);
 
-        validateNomeMicroServicoExist.validate(dto.nome(), dto.id(), dto.servicoId());
+        validateNomeMicroServicoExist.validate(dto.nome(), empresa.getId(), dto.servicoId());
 
         MicroServico microServico = new MicroServico();
         microServico.setNome(dto.nome());
