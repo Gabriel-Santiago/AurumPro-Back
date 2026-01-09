@@ -22,6 +22,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,10 +63,11 @@ public class EmpresaService implements UserDetailsService {
                 .consultaCnpj(dto.cnpj());
 
         validateCep.validate(dadosReceita.cep());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(dto.senha());
 
         Empresa empresa = new Empresa();
         empresa.setCnpj(dto.cnpj());
-        empresa.setSenha(dto.senha());
+        empresa.setSenha(encryptedPassword);
         empresa.setResponsavel(dto.responsavel());
         empresa.setInscricaoMunicipal(dto.inscricaoMunicipal());
 

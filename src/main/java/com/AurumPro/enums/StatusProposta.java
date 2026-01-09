@@ -10,7 +10,7 @@ public enum StatusProposta {
     RECUSADA("Recusada"),
     EXPIRADA("Expirada");
 
-    private String descricao;
+    private final String descricao;
 
     StatusProposta(String descricao){
         this.descricao = descricao;

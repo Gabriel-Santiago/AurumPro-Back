@@ -9,7 +9,7 @@ public enum TipoDesconto {
     VALOR("Valor"),
     NENHUM("Nenhum");
 
-    private String descricao;
+    private final String descricao;
 
     TipoDesconto(String descricao){
         this.descricao = descricao;
