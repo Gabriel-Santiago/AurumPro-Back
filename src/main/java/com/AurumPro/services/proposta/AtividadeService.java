@@ -33,7 +33,7 @@ public class AtividadeService {
     @Transactional
     public void createAtividade(CreateAtividadeDTO dto) {
         Proposta proposta = propostaRepository
-                .findById(dto.propostaId())
+                .findByPropostaId(dto.propostaId())
                 .orElseThrow(PropostaNotFoundException::new);
 
         validateNomeAtividadeExist.validate(dto.nome(), dto.propostaId());
@@ -48,7 +48,7 @@ public class AtividadeService {
 
     public List<AtividadeDTO> findAllAtividade(Long propostaId) {
         return repository
-                .findByProposta(propostaId)
+                .findByPropostaPropostaId(propostaId)
                 .stream()
                 .map(this::toDTO)
                 .toList();

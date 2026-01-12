@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface AtividadeRepository extends JpaRepository<Atividade, Long> {
 
-    List<Atividade> findByProposta(Long propostaId);
+    List<Atividade> findByPropostaPropostaId(Long propostaId);
 
-    boolean existsByNomeAndPropostaId(String nome, Long propostaId);
+    boolean existsByNomeAndPropostaPropostaId(String nome, Long propostaId);
 }

@@ -14,7 +14,7 @@ public class ValidateNomeAtividadeExist {
     }
 
     public void validate(String nome, Long propostaId) {
-        if (repository.existsByNomeAndPropostaId(nome, propostaId)) {
+        if (repository.existsByNomeAndPropostaPropostaId(nome, propostaId)) {
             throw new AtividadeNomeExistException();
         }
     }
