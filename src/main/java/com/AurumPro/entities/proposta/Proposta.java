@@ -75,4 +75,7 @@ public class Proposta {
     @ManyToOne
     @JoinColumn(name = "colaboradorId")
     private Colaborador colaborador;
+
+    @OneToMany(mappedBy = "proposta", cascade = CascadeType.ALL)
+    private List<Atividade> atividadeList;
 }
