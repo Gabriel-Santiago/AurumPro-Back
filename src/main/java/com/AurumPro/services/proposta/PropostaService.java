@@ -165,6 +165,14 @@ public class PropostaService {
                 .toList();
     }
 
+    public List<PropostaDTO> findPropostaByStatus(Long empresaId) {
+        return repository
+                .findByStatusPropostaAndEmpresaId(StatusProposta.ACEITA, empresaId)
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
     public Proposta updateStatus(Proposta proposta){
         boolean expirou = LocalDateTime.now().isAfter(proposta.getDataValidade());
 

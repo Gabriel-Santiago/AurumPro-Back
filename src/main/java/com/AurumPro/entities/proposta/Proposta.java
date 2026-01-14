@@ -38,7 +38,7 @@ public class Proposta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long propostaId;
+    private Long propostaId;
 
     private LocalDateTime dataCriacao;
     private LocalDateTime dataValidade;

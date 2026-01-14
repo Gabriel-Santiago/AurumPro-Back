@@ -1,5 +1,6 @@
 package com.AurumPro.entities.proposta;
 
+import com.AurumPro.entities.empresa.Empresa;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,4 +31,8 @@ public class Atividade {
     @ManyToOne(optional = false)
     @JoinColumn(name = "propostaId")
     private Proposta proposta;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "empresaId")
+    private Empresa empresa;
 }

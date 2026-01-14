@@ -48,6 +48,12 @@ public class PropostaController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/aceitas")
+    public ResponseEntity<List<PropostaDTO>> findPropostaByStatus(@AuthenticationPrincipal Empresa empresa){
+        return new ResponseEntity<>(service.findPropostaByStatus(empresa.getId()),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping("/{propostaId}")
     public ResponseEntity<Void> deleteProposta(@PathVariable("propostaId") Long propostaId) {
         service.delete(propostaId);
