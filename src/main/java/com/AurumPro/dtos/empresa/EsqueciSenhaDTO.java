@@ -1,8 +1,8 @@
 package com.AurumPro.dtos.empresa;
 
-public record LoginEmpresaDTO(
+public record EsqueciSenhaDTO(
         String email,
         String senha,
-        boolean podeAcessar
+        String codigoAcesso
 ) {
 }

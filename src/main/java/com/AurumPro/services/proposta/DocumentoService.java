@@ -111,7 +111,8 @@ public class DocumentoService {
                 empresa.getBairro(),
                 empresa.getCidade(),
                 empresa.getEstado(),
-                empresa.getNumero()
+                empresa.getNumero(),
+                empresa.isPodeAcessar()
         );
 
         ColaboradorDTO colaboradorDTO = null;

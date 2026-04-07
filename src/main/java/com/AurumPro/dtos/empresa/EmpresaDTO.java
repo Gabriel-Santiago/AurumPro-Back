@@ -13,6 +13,7 @@ public record EmpresaDTO(
         String bairro,
         String cidade,
         String estado,
-        String numero
+        String numero,
+        boolean podeAcessar
 ) {
 }

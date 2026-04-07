@@ -6,7 +6,9 @@ import com.AurumPro.api.ReceitaWS;
 import com.AurumPro.api.ViaCep;
 import com.AurumPro.dtos.empresa.CreateEmpresaDTO;
 import com.AurumPro.dtos.empresa.DeleteEmpresaDTO;
+import com.AurumPro.dtos.empresa.EmailDTO;
 import com.AurumPro.dtos.empresa.EmpresaDTO;
+import com.AurumPro.dtos.empresa.EsqueciSenhaDTO;
 import com.AurumPro.dtos.empresa.UpdateCepEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateEmailEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateTelefoneEmpresaDTO;
@@ -19,12 +21,15 @@ import com.AurumPro.utils.ValidateCep;
 import com.AurumPro.utils.ValidateCnpj;
 import com.AurumPro.utils.ValidateEmpresaCnpjExist;
 import jakarta.transaction.Transactional;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,6 +42,7 @@ public class EmpresaService implements UserDetailsService {
     private final ValidateEmpresaCnpjExist validateEmpresaCnpjExist;
     private final ValidadeId validadeId;
     private final ViaCep viaCep;
+    private final JavaMailSender mailSender;
 
     public EmpresaService(EmpresaRepository repository,
                           ReceitaWS receitaWS,
@@ -44,7 +50,8 @@ public class EmpresaService implements UserDetailsService {
                           ValidateCnpj validateCnpj,
                           ValidateEmpresaCnpjExist validateEmpresaCnpjExist,
                           ValidadeId validadeId,
-                          ViaCep viaCep) {
+                          ViaCep viaCep,
+                          JavaMailSender mailSender) {
         this.repository = repository;
         this.receitaWS = receitaWS;
         this.validateCep = validateCep;
@@ -52,6 +59,7 @@ public class EmpresaService implements UserDetailsService {
         this.validateEmpresaCnpjExist = validateEmpresaCnpjExist;
         this.validadeId = validadeId;
         this.viaCep = viaCep;
+        this.mailSender = mailSender;
     }
 
     @Transactional
@@ -84,6 +92,8 @@ public class EmpresaService implements UserDetailsService {
 
         empresa.setNome(dadosReceita.nome());
 
+        empresa.setPodeAcessar(true);
+
         repository.save(empresa);
     }
 
@@ -104,7 +114,8 @@ public class EmpresaService implements UserDetailsService {
                         dto.getBairro(),
                         dto.getCidade(),
                         dto.getEstado(),
-                        dto.getNumero()
+                        dto.getNumero(),
+                        dto.isPodeAcessar()
                 ))
                 .toList();
     }
@@ -125,7 +136,8 @@ public class EmpresaService implements UserDetailsService {
                         dto.getBairro(),
                         dto.getCidade(),
                         dto.getEstado(),
-                        dto.getNumero()
+                        dto.getNumero(),
+                        dto.isPodeAcessar()
                 ))
                 .orElseThrow(EmpresaNotFoundException::new);
     }
@@ -160,6 +172,49 @@ public class EmpresaService implements UserDetailsService {
     }
 
     @Transactional
+    public void enviarCodigoRecuperacao(EmailDTO dto) {
+        Empresa empresa = repository.findByEmail(dto.email())
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+        String codigo = gerarCodigo();
+        empresa.setCodigoAcesso(codigo);
+        empresa.setExpiracaoCodigo(LocalDateTime.now().plusMinutes(15));
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(empresa.getEmail());
+        message.setSubject("Recuperação de senha");
+        message.setText(
+                "Olá!\n\n" +
+                        "Seu código de recuperação de senha é: " + codigo + "\n\n" +
+                        "Esse código expira em 15 minutos."
+        );
+
+        mailSender.send(message);
+    }
+
+    @Transactional
+    public void esqueciSenha(EsqueciSenhaDTO dto){
+        Empresa empresa = repository.findByEmail(dto.email())
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+        if (empresa.getCodigoAcesso() == null ||
+                !dto.codigoAcesso().equals(empresa.getCodigoAcesso())) {
+            throw new RuntimeException("Código inválido");
+        }
+
+        if (empresa.getExpiracaoCodigo() == null ||
+                empresa.getExpiracaoCodigo().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Código expirado");
+        }
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(dto.senha());
+
+        empresa.setSenha(encryptedPassword);
+        empresa.setCodigoAcesso(null);
+        empresa.setExpiracaoCodigo(null);
+    }
+
+    @Transactional
     public void deleteEmpresa(DeleteEmpresaDTO dto){
         Empresa empresa = validadeId.validate(dto.id(), repository);
 
@@ -175,5 +230,9 @@ public class EmpresaService implements UserDetailsService {
         return repository.findByEmail(username)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("Empresa não encontrada"));
+    }
+
+    private String gerarCodigo() {
+        return String.valueOf((int)(100000 + Math.random() * 900000));
     }
 }

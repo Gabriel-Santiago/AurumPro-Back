@@ -2,7 +2,9 @@ package com.AurumPro.controllers.empresa;
 
 import com.AurumPro.dtos.empresa.CreateEmpresaDTO;
 import com.AurumPro.dtos.empresa.DeleteEmpresaDTO;
+import com.AurumPro.dtos.empresa.EmailDTO;
 import com.AurumPro.dtos.empresa.EmpresaDTO;
+import com.AurumPro.dtos.empresa.EsqueciSenhaDTO;
 import com.AurumPro.dtos.empresa.LoginEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateCepEmpresaDTO;
 import com.AurumPro.dtos.empresa.UpdateEmailEmpresaDTO;
@@ -58,6 +60,10 @@ public class EmpresaController {
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginEmpresaDTO dto,
                                       HttpServletResponse response){
+
+        if (!dto.podeAcessar()){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.email(), dto.senha())
@@ -170,6 +176,18 @@ public class EmpresaController {
         service.createEmpresa(dto);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<Void> recuperarSenha(@RequestBody EmailDTO dto) {
+        service.enviarCodigoRecuperacao(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/esqueci-senha")
+    public ResponseEntity<Void> esqueciSenha(@RequestBody EsqueciSenhaDTO dto) {
+        service.esqueciSenha(dto);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
