@@ -5,17 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "microServico")
-@AllArgsConstructor
-@Getter
-@NoArgsConstructor
-@Setter
 public class MicroServico extends BaseComponenteEntity {
 
     private String descricao;
@@ -23,4 +15,29 @@ public class MicroServico extends BaseComponenteEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "servicoId")
     private Servico servico;
+
+    public MicroServico() {
+    }
+
+    public MicroServico(String descricao,
+                        Servico servico) {
+        this.descricao = descricao;
+        this.servico = servico;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Servico getServico() {
+        return servico;
+    }
+
+    public void setServico(Servico servico) {
+        this.servico = servico;
+    }
 }

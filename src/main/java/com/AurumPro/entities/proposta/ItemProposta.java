@@ -9,19 +9,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "itemProposta")
-@AllArgsConstructor
-@Getter
-@NoArgsConstructor
-@Setter
 public class ItemProposta {
 
     @Id
@@ -43,4 +35,75 @@ public class ItemProposta {
     @ManyToOne
     @JoinColumn(name = "microServicoId")
     private MicroServico microServico;
+
+    public ItemProposta() {
+    }
+
+    public ItemProposta(long itemPropostaId,
+                        BigDecimal valorHora,
+                        BigDecimal qtdHora,
+                        BigDecimal valorTotal,
+                        Proposta proposta,
+                        Servico servico,
+                        MicroServico microServico) {
+        this.itemPropostaId = itemPropostaId;
+        this.valorHora = valorHora;
+        this.qtdHora = qtdHora;
+        this.valorTotal = valorTotal;
+        this.proposta = proposta;
+        this.servico = servico;
+        this.microServico = microServico;
+    }
+
+    public long getItemPropostaId() {
+        return itemPropostaId;
+    }
+
+    public BigDecimal getValorHora() {
+        return valorHora;
+    }
+
+    public void setValorHora(BigDecimal valorHora) {
+        this.valorHora = valorHora;
+    }
+
+    public BigDecimal getQtdHora() {
+        return qtdHora;
+    }
+
+    public void setQtdHora(BigDecimal qtdHora) {
+        this.qtdHora = qtdHora;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public Proposta getProposta() {
+        return proposta;
+    }
+
+    public void setProposta(Proposta proposta) {
+        this.proposta = proposta;
+    }
+
+    public Servico getServico() {
+        return servico;
+    }
+
+    public void setServico(Servico servico) {
+        this.servico = servico;
+    }
+
+    public MicroServico getMicroServico() {
+        return microServico;
+    }
+
+    public void setMicroServico(MicroServico microServico) {
+        this.microServico = microServico;
+    }
 }

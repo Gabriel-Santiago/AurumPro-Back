@@ -5,17 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "colaborador")
-@AllArgsConstructor
-@Getter
-@NoArgsConstructor
-@Setter
 public class Colaborador extends BaseEntity {
 
     private String telefone;
@@ -26,4 +18,38 @@ public class Colaborador extends BaseEntity {
     @JoinColumn(name = "empresaId")
     private Empresa empresa;
 
+    public Colaborador() {
+    }
+
+    public Colaborador(String telefone,
+                       String funcao,
+                       Empresa empresa) {
+        this.telefone = telefone;
+        this.funcao = funcao;
+        this.empresa = empresa;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getFuncao() {
+        return funcao;
+    }
+
+    public void setFuncao(String funcao) {
+        this.funcao = funcao;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
 }

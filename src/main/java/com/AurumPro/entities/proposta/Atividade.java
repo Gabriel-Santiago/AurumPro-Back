@@ -8,17 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "atividade")
-@AllArgsConstructor
-@Getter
-@NoArgsConstructor
-@Setter
 public class Atividade {
 
     @Id
@@ -35,4 +27,55 @@ public class Atividade {
     @ManyToOne(optional = false)
     @JoinColumn(name = "empresaId")
     private Empresa empresa;
+
+    public Atividade() {
+    }
+
+    public Atividade(long atividadeId,
+                     String nome,
+                     boolean concluida,
+                     Proposta proposta,
+                     Empresa empresa) {
+        this.atividadeId = atividadeId;
+        this.nome = nome;
+        this.concluida = concluida;
+        this.proposta = proposta;
+        this.empresa = empresa;
+    }
+
+    public long getAtividadeId() {
+        return atividadeId;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public boolean isConcluida() {
+        return concluida;
+    }
+
+    public void setConcluida(boolean concluida) {
+        this.concluida = concluida;
+    }
+
+    public Proposta getProposta() {
+        return proposta;
+    }
+
+    public void setProposta(Proposta proposta) {
+        this.proposta = proposta;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
 }
