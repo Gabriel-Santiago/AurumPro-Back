@@ -61,15 +61,16 @@ public class EmpresaController {
     public ResponseEntity<Void> login(@RequestBody LoginEmpresaDTO dto,
                                       HttpServletResponse response){
 
-        if (!dto.podeAcessar()){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.email(), dto.senha())
         );
 
         Empresa empresa = (Empresa) authentication.getPrincipal();
+
+        if (!empresa.isPodeAcessar()){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
         String accessToken = tokenService.generateToken(empresa);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(empresa);
 
