@@ -11,6 +11,7 @@ public record CreatePropostaDTO(
         Long colaboradorId,
         List<Long> custoList,
         List<Long> itemPropostaList,
+        List<Long> atividadeList,
         TipoDesconto tipoDesconto,
         boolean desconto,
         BigDecimal valorDesconto,

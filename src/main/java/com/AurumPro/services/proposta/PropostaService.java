@@ -1,6 +1,7 @@
 package com.AurumPro.services.proposta;
 
 import com.AurumPro.dtos.componentes.custo.CustoDTO;
+import com.AurumPro.dtos.proposta.AtividadeDTO;
 import com.AurumPro.dtos.proposta.CreatePropostaDTO;
 import com.AurumPro.dtos.proposta.ItemPropostaDTO;
 import com.AurumPro.dtos.proposta.PropostaDTO;
@@ -9,6 +10,7 @@ import com.AurumPro.entities.componentes.Convenio;
 import com.AurumPro.entities.componentes.Custo;
 import com.AurumPro.entities.empresa.Colaborador;
 import com.AurumPro.entities.empresa.Empresa;
+import com.AurumPro.entities.proposta.Atividade;
 import com.AurumPro.entities.proposta.ItemProposta;
 import com.AurumPro.entities.proposta.Proposta;
 import com.AurumPro.enums.StatusProposta;
@@ -23,6 +25,7 @@ import com.AurumPro.repositories.cliente.ClienteRepository;
 import com.AurumPro.repositories.componentes.ConvenioRepository;
 import com.AurumPro.repositories.componentes.CustoRepository;
 import com.AurumPro.repositories.empresa.ColaboradorRepository;
+import com.AurumPro.repositories.proposta.AtividadeRepository;
 import com.AurumPro.repositories.proposta.ItemPropostaRepository;
 import com.AurumPro.repositories.proposta.PropostaRepository;
 import jakarta.transaction.Transactional;
@@ -31,6 +34,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -42,19 +46,22 @@ public class PropostaService {
     private final ClienteRepository clienteRepository;
     private final ItemPropostaRepository itemPropostaRepository;
     private final PropostaRepository repository;
+    private  final AtividadeRepository atividadeRepository;
 
     public PropostaService(ColaboradorRepository colaboradorRepository,
                            ConvenioRepository convenioRepository,
                            CustoRepository custoRepository,
                            ClienteRepository clienteRepository,
                            ItemPropostaRepository itemPropostaRepository,
-                           PropostaRepository repository) {
+                           PropostaRepository repository,
+                           AtividadeRepository atividadeRepository) {
         this.colaboradorRepository = colaboradorRepository;
         this.convenioRepository = convenioRepository;
         this.custoRepository = custoRepository;
         this.clienteRepository = clienteRepository;
         this.itemPropostaRepository = itemPropostaRepository;
         this.repository = repository;
+        this.atividadeRepository = atividadeRepository;
     }
 
     @Transactional
@@ -77,9 +84,29 @@ public class PropostaService {
             colaborador = colaboradorRepository.findById(dto.colaboradorId())
                     .orElseThrow(ColaboradorNotFoundException::new);
 
-            if (!colaborador.getEmpresa().getId().equals(empresa.getId())){
+            if (!colaborador.getEmpresa().getId().equals(empresa.getId())) {
                 throw new ColaboradorNotAssociatedToEmpresaException();
             }
+        }
+
+        List<Long> custoIds = dto.custoList() == null ? Collections.emptyList() : dto.custoList();
+        List<Long> itemIds = dto.itemPropostaList() == null ? Collections.emptyList() : dto.itemPropostaList();
+        List<Long> atividadeIds = dto.atividadeList() == null ? Collections.emptyList() : dto.atividadeList();
+
+        List<Custo> custoList = custoRepository.findAllById(custoIds);
+        List<ItemProposta> itemPropostaList = itemPropostaRepository.findAllById(itemIds);
+        List<Atividade> atividadeList = atividadeRepository.findAllById(atividadeIds);
+
+        if (custoList.size() != custoIds.size()) {
+            throw new RuntimeException("Um ou mais custos não foram encontrados");
+        }
+
+        if (itemPropostaList.size() != itemIds.size()) {
+            throw new RuntimeException("Um ou mais itens da proposta não foram encontrados");
+        }
+
+        if (atividadeList.size() != atividadeIds.size()) {
+            throw new RuntimeException("Uma ou mais atividades não foram encontradas");
         }
 
         Proposta proposta = new Proposta();
@@ -90,18 +117,20 @@ public class PropostaService {
         proposta.setConvenio(convenio);
         proposta.setColaborador(colaborador);
         proposta.setStatusProposta(StatusProposta.EM_AVALIACAO);
-
         proposta.setValorDesconto(BigDecimal.ZERO);
         proposta.setPorcentagemDesconto(BigDecimal.ZERO);
         proposta.setTipoDesconto(dto.tipoDesconto());
 
-        Proposta propostaSalva = repository.save(proposta);
+        proposta = repository.save(proposta);
 
-        List<Custo> custoList = custoRepository.findAllById(dto.custoList());
-        custoList.forEach(c -> c.setProposta(propostaSalva));
+        Proposta finalProposta = proposta;
 
-        List<ItemProposta> itemPropostaList = itemPropostaRepository.findAllById(dto.itemPropostaList());
-        itemPropostaList.forEach(i -> i.setProposta(propostaSalva));
+        custoList.forEach(c -> c.setProposta(finalProposta));
+        itemPropostaList.forEach(i -> i.setProposta(finalProposta));
+        atividadeList.forEach(a -> {
+            a.setProposta(finalProposta);
+            a.setConcluida(false);
+        });
 
         BigDecimal sumCusto = custoList.stream()
                 .map(Custo::getValor)
@@ -112,19 +141,15 @@ public class PropostaService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal totalBruto = sumCusto.add(sumItemProposta);
-
         BigDecimal valorTotalFinal = totalBruto;
 
         if (dto.desconto() && dto.tipoDesconto() != TipoDesconto.NENHUM) {
-
             switch (dto.tipoDesconto()) {
-
-                case VALOR:
+                case VALOR -> {
                     proposta.setValorDesconto(dto.valorDesconto());
                     valorTotalFinal = totalBruto.subtract(dto.valorDesconto());
-                    break;
-
-                case PORCENTAGEM:
+                }
+                case PORCENTAGEM -> {
                     proposta.setPorcentagemDesconto(dto.porcentagemDesconto());
 
                     BigDecimal desconto = totalBruto
@@ -132,18 +157,15 @@ public class PropostaService {
                             .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
 
                     valorTotalFinal = totalBruto.subtract(desconto);
-                    break;
+                }
             }
         }
 
         proposta.setValorTotal(valorTotalFinal.max(BigDecimal.ZERO));
-
         proposta.setCustoList(custoList);
         proposta.setItemPropostaList(itemPropostaList);
-
-        repository.save(proposta);
+        proposta.setAtividadeList(atividadeList);
     }
-
 
     public List<PropostaDTO> findAll(Long empresaId){
         List<Proposta> propostaList = repository.findByEmpresaId(empresaId);
@@ -217,6 +239,9 @@ public class PropostaService {
                                 i.getQtdHora(),
                                 i.getValorTotal()
                         ))
+                        .toList(),
+                proposta.getAtividadeList().stream()
+                        .map(a -> new AtividadeDTO(a.getId(), a.getNome(), a.isConcluida()))
                         .toList(),
                 proposta.getTipoDesconto(),
                 proposta.isDesconto(),

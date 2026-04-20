@@ -1,10 +1,7 @@
 package com.AurumPro.services.proposta;
 
 import com.AurumPro.dtos.componentes.custo.CustoDTO;
-import com.AurumPro.dtos.proposta.FinancasDashboardDTO;
-import com.AurumPro.dtos.proposta.ItemPropostaDTO;
-import com.AurumPro.dtos.proposta.PropostaDTO;
-import com.AurumPro.dtos.proposta.UpdateStatusPropostaDTO;
+import com.AurumPro.dtos.proposta.*;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.entities.proposta.Proposta;
 import com.AurumPro.enums.StatusProposta;
@@ -148,6 +145,9 @@ public class FinancaService {
                                 i.getQtdHora(),
                                 i.getValorTotal()
                         ))
+                        .toList(),
+                proposta.getAtividadeList().stream()
+                        .map(a -> new AtividadeDTO(a.getId(), a.getNome(), a.isConcluida()))
                         .toList(),
                 proposta.getTipoDesconto(),
                 proposta.isDesconto(),

@@ -1,7 +1,7 @@
 package com.AurumPro.dtos.proposta;
 
 public record AtividadeDTO(
-        Long atividadeId,
+        Long id,
         String nome,
         boolean concluida
 ) {

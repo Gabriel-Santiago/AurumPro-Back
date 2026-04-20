@@ -20,8 +20,8 @@ public interface AtividadeRepository extends JpaRepository<Atividade, Long> {
         select a from Atividade a
         join fetch a.proposta p
         join fetch p.empresa
-        where a.atividadeId = :atividadeId
+        where a.id = :id
     """)
-    Optional<Atividade> findAutorizada(@Param("atividadeId") Long atividadeId);
+    Optional<Atividade> findAutorizada(@Param("id") Long id);
 
 }

@@ -2,6 +2,7 @@ package com.AurumPro.services.proposta;
 
 import com.AurumPro.dtos.proposta.AtividadeDTO;
 import com.AurumPro.dtos.proposta.CreateAtividadeDTO;
+import com.AurumPro.dtos.proposta.CreateAtividadePropostaDTO;
 import com.AurumPro.dtos.proposta.UpdateAtividadeDTO;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.entities.proposta.Atividade;
@@ -34,7 +35,7 @@ public class AtividadeService {
     }
 
     @Transactional
-    public void createAtividade(CreateAtividadeDTO dto, Empresa empresa) {
+    public AtividadeDTO createAtividade(CreateAtividadeDTO dto, Empresa empresa) {
         Proposta proposta = propostaRepository
                 .findByPropostaId(dto.propostaId())
                 .orElseThrow(PropostaNotFoundException::new);
@@ -47,7 +48,29 @@ public class AtividadeService {
         atividade.setProposta(proposta);
         atividade.setEmpresa(empresa);
 
-        repository.save(atividade);
+        atividade = repository.save(atividade);
+
+        return new AtividadeDTO(
+                atividade.getId(),
+                atividade.getNome(),
+                atividade.isConcluida()
+        );
+    }
+
+    @Transactional
+    public AtividadeDTO createAtividadeProposta(CreateAtividadePropostaDTO dto, Empresa empresa) {
+        Atividade atividade = new Atividade();
+        atividade.setNome(dto.nome());
+        atividade.setConcluida(false);
+        atividade.setEmpresa(empresa);
+
+        atividade = repository.save(atividade);
+
+        return new AtividadeDTO(
+                atividade.getId(),
+                atividade.getNome(),
+                atividade.isConcluida()
+        );
     }
 
     public List<AtividadeDTO> findAllAtividade(Long propostaId, Long empresaId) {
@@ -67,7 +90,7 @@ public class AtividadeService {
 
     @Transactional
     public void updateConcluidaAtividade(UpdateAtividadeDTO dto, Empresa empresa) throws AccessDeniedException {
-        Atividade atividade = getAtividadeAutorizada(dto.atividadeId(), empresa);
+        Atividade atividade = getAtividadeAutorizada(dto.id(), empresa);
 
         atividade.setConcluida(dto.concluida());
     }
@@ -81,7 +104,7 @@ public class AtividadeService {
 
     private AtividadeDTO toDTO(Atividade atividade) {
         return new AtividadeDTO(
-                atividade.getAtividadeId(),
+                atividade.getId(),
                 atividade.getNome(),
                 atividade.isConcluida()
         );

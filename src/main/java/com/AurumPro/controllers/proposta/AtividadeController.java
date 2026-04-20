@@ -2,6 +2,7 @@ package com.AurumPro.controllers.proposta;
 
 import com.AurumPro.dtos.proposta.AtividadeDTO;
 import com.AurumPro.dtos.proposta.CreateAtividadeDTO;
+import com.AurumPro.dtos.proposta.CreateAtividadePropostaDTO;
 import com.AurumPro.dtos.proposta.UpdateAtividadeDTO;
 import com.AurumPro.entities.empresa.Empresa;
 import com.AurumPro.services.proposta.AtividadeService;
@@ -24,10 +25,19 @@ public class AtividadeController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createAtividade(@RequestBody CreateAtividadeDTO dto,
+    public ResponseEntity<AtividadeDTO> createAtividade(@RequestBody CreateAtividadeDTO dto,
                                                 @AuthenticationPrincipal Empresa empresa) {
         service.createAtividade(dto, empresa);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/proposta")
+    public ResponseEntity<AtividadeDTO> createAtividadeProposta(
+            @RequestBody CreateAtividadePropostaDTO dto,
+            @AuthenticationPrincipal Empresa empresa
+    ) {
+        AtividadeDTO atividadeDTO = service.createAtividadeProposta(dto, empresa);
+        return ResponseEntity.status(HttpStatus.CREATED).body(atividadeDTO);
     }
 
     @GetMapping("/{propostaId}")

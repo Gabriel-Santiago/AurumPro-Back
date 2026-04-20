@@ -18,6 +18,7 @@ public record PropostaDTO(
         String nomeConvenio,
         List<CustoDTO> custoList,
         List<ItemPropostaDTO> itemPropostaList,
+        List<AtividadeDTO> atividadeList,
         TipoDesconto tipoDesconto,
         boolean desconto,
         BigDecimal valorDesconto,
