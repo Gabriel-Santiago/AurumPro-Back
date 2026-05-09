@@ -103,7 +103,6 @@ public class DocumentoService {
                 empresa.getEmail(),
                 empresa.getNome(),
                 empresa.getCnpj(),
-                empresa.getInscricaoMunicipal(),
                 empresa.getResponsavel(),
                 empresa.getTelefone(),
                 empresa.getCep(),
