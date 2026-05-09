@@ -40,8 +40,8 @@ public class ColaboradorController {
     }
 
     @GetMapping("/funcoes")
-    public ResponseEntity<List<String>> findAllFuncao() {
-        return new ResponseEntity<>(service.findAllFuncao(),
+    public ResponseEntity<List<String>> findAllFuncao(@AuthenticationPrincipal Empresa empresa) {
+        return new ResponseEntity<>(service.findAllFuncao(empresa.getId()),
                 HttpStatus.OK);
     }
 }

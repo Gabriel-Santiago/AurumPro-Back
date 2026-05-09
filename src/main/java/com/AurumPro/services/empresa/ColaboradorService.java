@@ -50,9 +50,9 @@ public class ColaboradorService {
                 .toList();
     }
 
-    public List<String> findAllFuncao(){
+    public List<String> findAllFuncao(Long empresaId){
         return repository
-                .findAll()
+                .findByEmpresaId(empresaId)
                 .stream()
                 .map(Colaborador::getFuncao)
                 .filter(funcao -> funcao != null && !funcao.trim().isEmpty())
