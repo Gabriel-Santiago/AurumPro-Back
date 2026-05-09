@@ -77,9 +77,8 @@ public class EmpresaService implements UserDetailsService {
         empresa.setCnpj(dto.cnpj());
         empresa.setSenha(encryptedPassword);
         empresa.setResponsavel(dto.responsavel());
-        empresa.setInscricaoMunicipal(dto.inscricaoMunicipal());
+        empresa.setEmail(dto.email());
 
-        empresa.setEmail(dadosReceita.email());
         empresa.setTelefone(dadosReceita.telefone());
 
         empresa.setCep(dadosReceita.cep());
@@ -106,7 +105,6 @@ public class EmpresaService implements UserDetailsService {
                         dto.getEmail(),
                         dto.getNome(),
                         dto.getCnpj(),
-                        dto.getInscricaoMunicipal(),
                         dto.getResponsavel(),
                         dto.getTelefone(),
                         dto.getCep(),
@@ -128,7 +126,6 @@ public class EmpresaService implements UserDetailsService {
                         dto.getEmail(),
                         dto.getNome(),
                         dto.getCnpj(),
-                        dto.getInscricaoMunicipal(),
                         dto.getResponsavel(),
                         dto.getTelefone(),
                         dto.getCep(),

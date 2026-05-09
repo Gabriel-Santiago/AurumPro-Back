@@ -5,7 +5,6 @@ public record EmpresaDTO(
         String email,
         String nome,
         String cnpj,
-        String inscricaoMunicipal,
         String responsavel,
         String telefone,
         String cep,

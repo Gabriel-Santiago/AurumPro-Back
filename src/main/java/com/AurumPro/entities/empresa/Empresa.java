@@ -32,7 +32,6 @@ public class Empresa extends BaseEntity implements UserDetails {
     private String senha;
 
     private String cnpj;
-    private String inscricaoMunicipal;
     private String responsavel;
     private String telefone;
 
@@ -77,7 +76,6 @@ public class Empresa extends BaseEntity implements UserDetails {
     public Empresa(String email,
                    String senha,
                    String cnpj,
-                   String inscricaoMunicipal,
                    String responsavel,
                    String telefone,
                    String cep,
@@ -99,7 +97,6 @@ public class Empresa extends BaseEntity implements UserDetails {
         this.email = email;
         this.senha = senha;
         this.cnpj = cnpj;
-        this.inscricaoMunicipal = inscricaoMunicipal;
         this.responsavel = responsavel;
         this.telefone = telefone;
         this.cep = cep;
@@ -165,10 +162,6 @@ public class Empresa extends BaseEntity implements UserDetails {
 
     public String getCnpj() {
         return cnpj;
-    }
-
-    public String getInscricaoMunicipal() {
-        return inscricaoMunicipal;
     }
 
     public String getResponsavel() {
@@ -257,10 +250,6 @@ public class Empresa extends BaseEntity implements UserDetails {
 
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
-    }
-
-    public void setInscricaoMunicipal(String inscricaoMunicipal) {
-        this.inscricaoMunicipal = inscricaoMunicipal;
     }
 
     public void setResponsavel(String responsavel) {

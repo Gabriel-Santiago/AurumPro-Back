@@ -10,7 +10,6 @@ public record DadosReceita (
         String uf,
         String numero,
 
-        String email,
         String telefone
 ){
 }

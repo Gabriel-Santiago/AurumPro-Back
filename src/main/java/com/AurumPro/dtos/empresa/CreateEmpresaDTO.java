@@ -4,6 +4,6 @@ public record CreateEmpresaDTO(
         String cnpj,
         String senha,
         String responsavel,
-        String inscricaoMunicipal
+        String email
 ) {
 }
