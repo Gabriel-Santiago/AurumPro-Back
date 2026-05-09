@@ -105,9 +105,9 @@ public class EmpresaController {
         refreshTokenService.deleteByEmpresa(empresa.getId());
 
         ResponseCookie deleteAccess = ResponseCookie.from("access_token", "")
+                .httpOnly(true)
                 .secure(false)
                 .sameSite("Lax")
-                .sameSite("None")
                 .path("/")
                 .maxAge(0)
                 .build();
@@ -130,11 +130,21 @@ public class EmpresaController {
     public ResponseEntity<Void> refresh(HttpServletRequest request,
                                         HttpServletResponse response) {
 
-        String refreshTokenValue = Arrays.stream(request.getCookies())
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String refreshTokenValue = Arrays.stream(cookies)
                 .filter(c -> c.getName().equals("refresh_token"))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElseThrow(() -> new RuntimeException("Refresh token ausente"));
+                .orElse(null);
+
+        if (refreshTokenValue == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         RefreshToken oldToken =
                 refreshTokenService.validateRefreshToken(refreshTokenValue);
