@@ -76,17 +76,17 @@ public class EmpresaController {
 
         ResponseCookie accessCookie = ResponseCookie.from("access_token", accessToken)
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
+                .secure(false)
+                .sameSite("Lax")
                 .path("/")
-                .maxAge(Duration.ofMinutes(10))
+                .maxAge(Duration.ofMinutes(15))
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", refreshToken.getToken())
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .path("/empresas/refresh")
+                .secure(false)
+                .sameSite("Lax")
+                .path("/")
                 .maxAge(Duration.ofDays(3))
                 .build();
 
@@ -105,8 +105,8 @@ public class EmpresaController {
         refreshTokenService.deleteByEmpresa(empresa.getId());
 
         ResponseCookie deleteAccess = ResponseCookie.from("access_token", "")
-                .httpOnly(true)
-                .secure(true)
+                .secure(false)
+                .sameSite("Lax")
                 .sameSite("None")
                 .path("/")
                 .maxAge(0)
@@ -114,9 +114,9 @@ public class EmpresaController {
 
         ResponseCookie deleteRefresh = ResponseCookie.from("refresh_token", "")
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .path("/empresas/refresh")
+                .secure(false)
+                .sameSite("Lax")
+                .path("/")
                 .maxAge(0)
                 .build();
 
@@ -147,17 +147,17 @@ public class EmpresaController {
 
         ResponseCookie accessCookie = ResponseCookie.from("access_token", newAccessToken)
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
+                .secure(false)
+                .sameSite("Lax")
                 .path("/")
                 .maxAge(Duration.ofMinutes(15))
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", newRefreshToken.getToken())
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .path("/empresas/refresh")
+                .secure(false)
+                .sameSite("Lax")
+                .path("/")
                 .maxAge(Duration.ofDays(3))
                 .build();
 

@@ -9,6 +9,7 @@ import com.AurumPro.entities.componentes.Servico;
 import com.AurumPro.entities.proposta.Proposta;
 import com.AurumPro.enums.Role;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
@@ -26,6 +27,7 @@ import java.util.List;
 @Table(name = "empresa")
 public class Empresa extends BaseEntity implements UserDetails {
 
+    @Column(nullable = false, unique = true)
     private String email;
     private String senha;
 

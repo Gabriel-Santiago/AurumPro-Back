@@ -37,22 +37,29 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         Cookie[] cookies = request.getCookies();
 
-        if (cookies != null) {
-            String accessToken = Arrays.stream(cookies)
-                    .filter(cookie -> "access_token".equals(cookie.getName()))
-                    .map(Cookie::getValue)
-                    .findFirst()
-                    .orElse(null);
+        if (cookies == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-            if (accessToken != null &&
-                    SecurityContextHolder.getContext().getAuthentication() == null) {
+        String accessToken = Arrays.stream(cookies)
+                .filter(cookie -> "access_token".equals(cookie.getName()))
+                .map(Cookie::getValue)
+                .findFirst()
+                .orElse(null);
 
+        if (accessToken == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            try {
                 String email = tokenService.extractUsername(accessToken);
 
                 Empresa empresa = (Empresa) empresaService.loadUserByUsername(email);
 
                 if (tokenService.validateToken(accessToken, empresa)) {
-
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
                                     empresa,
@@ -61,13 +68,13 @@ public class SecurityFilter extends OncePerRequestFilter {
                             );
 
                     authentication.setDetails(
-                            new WebAuthenticationDetailsSource()
-                                    .buildDetails(request)
+                            new WebAuthenticationDetailsSource().buildDetails(request)
                     );
 
-                    SecurityContextHolder.getContext()
-                            .setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
+            } catch (Exception e) {
+                SecurityContextHolder.clearContext();
             }
         }
 
